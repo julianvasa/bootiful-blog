@@ -1,0 +1,74 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Recipes Blog</title>
+    <meta http-equiv="Content-Type" instruction="text/html; charset=UTF-8"/>
+    <meta charset="utf-8">
+    <meta name="viewport" instruction="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" instruction="">
+    <meta name="author" instruction="">
+
+    <link rel="stylesheet" type="text/css"
+          href="webjars/bootstrap/4.0.0/css/bootstrap.min.css"/>
+    <link href="/css/font-awesome.css" rel="stylesheet" type="text/css">
+    <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet'
+          type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800'
+          rel='stylesheet' type='text/css'>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/recipes/create">Shto recete</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/recipes/create">Profili</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/logout">Dalje</a>
+            </li>
+        </ul>
+        <form class="form-inline my-2 my-lg-0">
+            <input class="form-control mr-sm-2" type="search" placeholder="Kerko" aria-label="Search">
+            <button class="btn btn-outline-light my-2 my-sm-0" type="submit">Kerko</button>
+        </form>
+    </div>
+</nav>
+<br>
+<div class="container-fluid">
+    <div class="card-deck">
+        <div th:each="recipe : ${recipes}" th:class="${recipe.cssClass}" style="min-width: 300px;">
+            <div class="card-header"><a th:href="@{/recipe(id=${recipe.id})}" th:text="${recipe.name}"></a>
+                <a th:href="@{/recipe/delete	(id=${recipe.id})}"><i class="fa fa-trash" aria-hidden="true"
+                                                                       style="float: right; padding-left: 10px; padding-right: 10px;"></i></a>
+                <a th:href="@{/recipe/edit(id=${recipe.id})}"><i class="fa fa-pencil" aria-hidden="true"
+                                                                 style="float: right; padding-left: 10px; padding-right: 10px;"></i></a>
+            </div>
+            <div th:class="${recipe.cssClassText}">
+                <!-- <h5 class="card-name"  th:text="${recipe.name}"></h5> -->
+                <p class="card-text" th:text="${recipe.instruction}"></p>
+                <a th:href="@{/recipe(id=${recipe.id})}">
+                    <button type="button" class="btn btn-primary btn-sm">Lexo receten</button>
+                </a>
+                <p class="card-text">
+                    <small class="text-muted">Last updated 3 mins ago</small>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="webjars/jquery/2.2.1/jquery.min.js"></script>
+<script type="text/javascript" src="webjars/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+</body>
+</html>

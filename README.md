@@ -14,7 +14,7 @@
 <li>Internationalization (EN, AL)</li>
 <li>Some experiments with Lambda functions</li>
 <li>Pagination</li>
-
+</ul>
 <br>
 <p>The blog has a homepage which displays recent (paginated) recipes. 
 The recipes are grouped by categories

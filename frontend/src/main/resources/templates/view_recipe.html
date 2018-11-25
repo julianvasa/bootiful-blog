@@ -1,0 +1,79 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>[[${recipe.name}]]</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/png" href="/img/favicon.png"/>
+    <link href="https://fonts.googleapis.com/css?family=Handlee" rel="stylesheet">
+    <link href="/css/bootstrap.css" rel="stylesheet">
+    <link href="/css/ionicons.css" rel="stylesheet">
+    <link href="/css/styles.css" rel="stylesheet">
+    <link href="/css/responsive.css" rel="stylesheet">
+    <link href="/css/style_detail.css" rel="stylesheet">
+
+</head>
+<body>
+<div th:replace="header :: header">Header</div>
+
+<section class="section blog-area">
+    <div class="container">
+        <div class="row" style="background: white; padding: 20px;">
+
+            <div class="col-lg-8 col-md-12">
+                <div class="blog-posts">
+
+                    <div class="single-post">
+                        <div class=" image-wrapper">
+                            <h3 class="title">
+                                <span th:text="${recipe.name}"/>
+                            </h3>
+                            <p style="font-size:14px;"><strong>[[#{servings}]]:&nbsp;</strong>[[${recipe.servings}]]
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <strong>[[#{time}]]:&nbsp;</strong>[[${recipe.time}]]
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <strong>[[#{difficulty}]]:&nbsp;</strong>[[${recipe.calories}]]</p>
+                            <br>
+                            <img th:src="${recipe.image}"/>
+                        </div>
+
+                        <div class="icons">
+                            <div class="left-area">
+                                <a class="btn caegory-btn"
+                                   th:href="@{/1/cat/}+${currentCat.id}"><b>[[${#strings.toUpperCase(currentCat.name)}]]</b></a>
+                            </div>
+                            <ul class="right-area social-icons">
+                                <li><a href="#"><i class="ion-android-share-alt"></i>Share</a></li>
+                                <li><a href="#"><i class="ion-android-favorite-outline"></i>03</a></li>
+                                <li><a href="#"><i class="ion-android-textsms"></i>06</a></li>
+                            </ul>
+                        </div>
+                        <!--<p class="date"><em>[[#{posted}+':
+                            '+${recipe.posted.toString().substring(6,8)}+'/'+${recipe.posted.toString().substring(4,6)}+'/'+${recipe.posted.toString().substring(0,4)}]]</em>
+                        </p>-->
+
+                        <p th:utext="${recipe.intro}"></p>
+
+                        <h5 class="quoto" th:if="${recipe.ingredients.size()}>0"><em><i class="ion-quote">
+                            <b>Perberesit</b></i><br>
+                            <ul>
+                                <li th:each="ingr : ${recipe.ingredients}" style="width:600px;">▪ [[${ingr.name}]]</li>
+                            </ul>
+                        </em></h5>
+                        <p th:utext="${recipe.instruction}"></p>
+                    </div><!-- single-post -->
+
+                </div><!-- blog-posts -->
+            </div><!-- col-lg-4 -->
+
+            <div th:replace="sidebar :: sidebar">Sidebar</div>
+
+        </div><!-- row -->
+    </div><!-- container -->
+</section><!-- section -->
+
+<div th:replace="footer :: footer">Footer</div>
+
+</body>
+</html>

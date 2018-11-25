@@ -1,0 +1,7 @@
+al/recipes/categories/GetCategoriesResponse.class
+al/recipes/categories/Categories.class
+al/recipes/categories/package-info.class
+al/recipes/endpoint/CategoriesEndpoint.class
+al/recipes/configuration/WebServiceConfig.class
+al/recipes/categories/GetCategoriesRequest.class
+al/recipes/categories/ObjectFactory.class

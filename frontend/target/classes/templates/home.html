@@ -1,0 +1,128 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>[[#{header_txt}]]</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/png" href="/img/favicon.png"/>
+
+    <link href="https://fonts.googleapis.com/css?family=Handlee" rel="stylesheet">
+    <link href="/css/bootstrap.css" rel="stylesheet">
+    <link href="/css/ionicons.css" rel="stylesheet">
+    <link href="/css/styles.css" rel="stylesheet">
+    <link href="/css/style_home.css" rel="stylesheet">
+    <link href="/css/responsive.css" rel="stylesheet">
+</head>
+<body>
+<div th:replace="header :: header">Header</div>
+
+<section class="section blog-area">
+    <div class="container">
+        <div class="row" style="background: white; padding: 20px;">
+
+            <div class="col-lg-8 col-md-12">
+                <div class="blog-posts">
+                    <p th:if="${currentCat!=null}" style="font-family: 'Handlee', cursive; font-size:40px;">
+                        <img style="width: 8%; float: left; margin-right:10px;"
+                             th:src="@{${'/img/categories/' + currentCat.image + '.png'}}"
+                             alt="${currentCat.name}">
+                        [[${currentCat.name}]]</p>
+                    <div class="single-post" th:each="recipe,iter : ${recipes}" th:if="*{iter.index} < 4">
+                        <div class=" image-wrapper
+                    ">
+                            <h3 class="title"><a th:href="@{/recipe/}+${recipe.id}" th:text="${recipe.name}"><b
+                                    class="light-color"></b></a></h3>
+                            <p style="font-size:14px;"><strong>[[#{servings}]]:&nbsp;</strong>[[${recipe.servings}]]
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <strong>[[#{time}]]:&nbsp;</strong>[[${recipe.time}]]
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <strong>[[#{difficulty}]]:&nbsp;</strong>[[${recipe.calories}]]</p>
+                            <br>
+                            <a th:href="@{/recipe/}+${recipe.id}"><img th:src="${recipe.image}"/></a></div>
+
+                        <div class="icons">
+                            <div class="left-area">
+                                <a class="btn caegory-btn"
+                                   th:href="@{/1/cat/}+${recipe.category.id}"><b>[[${#strings.toUpperCase(recipe.category.name)}]]</b></a>
+                            </div>
+                            <ul class="right-area social-icons">
+                                <li><a href="#"><i class="ion-android-share-alt"></i>Share</a></li>
+                                <li><a href="#"><i class="ion-android-favorite-outline"></i>03</a></li>
+                                <li><a href="#"><i class="ion-android-textsms"></i>06</a></li>
+                            </ul>
+                        </div>
+
+
+                        <p th:if="${recipe.instruction.length()}<=300"
+                           th:text="${recipe.instruction}"></p>
+                        <p th:if="${recipe.instruction.length()}>300"
+                           th:text="${recipe.instruction.substring(0,300)}+' ...'"></p>
+                        <br>
+                        <!--<p class="date"><em>[[#{posted}+':
+                            '+${recipe.posted.toString().substring(6,8)}+'/'+${recipe.posted.toString().substring(4,6)}+'/'+${recipe.posted.toString().substring(0,4)}]]</em>
+                        </p>-->
+                        <a class="btn read-more-btn" th:href="@{/recipe/}+${recipe.id}"><b>[[#{read}]]</b></a>
+
+
+                    </div><!-- single-post -->
+
+
+                    <div class="row">
+
+                        <div class="col-lg-6 col-md-12" th:each="recipe,iter : ${recipes}" th:if="*{iter.index} >= 4">
+                            <div class="single-post">
+                                <h3 class="title"><a th:href="@{/recipe/}+${recipe.id}" th:text="${recipe.name}"><b
+                                        class="light-color"></b></a></h3>
+                                <p style="font-size:14px;"><strong>[[#{servings}]]:&nbsp;</strong>[[${recipe.servings}]]<br>
+                                    <strong>[[#{time}]]:&nbsp;</strong>[[${recipe.time}]]<br>
+                                    <strong>[[#{difficulty}]]:&nbsp;</strong>[[${recipe.calories}]]</p>
+                                <br>
+                                <div class="image-wrapper"><a th:href="@{/recipe/}+${recipe.id}"><img
+                                        th:src="${recipe.image}"/></a>
+                                </div>
+
+                                <div class="icons">
+                                    <div class="left-area">
+                                        <a class="btn caegory-btn"
+                                           th:href="@{/1/cat/}+${recipe.category.id}"><b>[[${#strings.toUpperCase(recipe.category.name)}]]</b></a>
+                                        <br>
+                                        <ul class="right-area social-icons">
+                                            <li><a href="#"><i class="ion-android-share-alt"></i>Share</a></li>
+                                            <li><a href="#"><i class="ion-android-favorite-outline"></i>03</a></li>
+                                            <li><a href="#"><i class="ion-android-textsms"></i>06</a></li>
+                                        </ul>
+                                    </div>
+
+
+                                </div>
+                                <!--<p class="date"><em>[[#{posted}+':
+                                    '+${recipe.posted.toString().substring(6,8)}+'/'+${recipe.posted.toString().substring(4,6)}+'/'+${recipe.posted.toString().substring(0,4)}]]</em>
+                                </p>-->
+                                <p th:if="${recipe.instruction.length()}<=300"
+                                   th:text="${recipe.instruction}"></p>
+                                <p th:if="${recipe.instruction.length()}>300"
+                                   th:text="${recipe.instruction.substring(0,300)}+' ...'"></p>
+                                <a class="btn read-more-btn" th:href="@{/recipe/}+${recipe.id}"><b>[[#{read}]]</b></a>
+                            </div><!-- single-post -->
+                        </div><!-- col-sm-6 -->
+
+                    </div><!-- row -->
+
+                    <a th:if="${link_more}!='#'" class="btn load-more-btn" th:href="${link_more}">[[#{older}]]</a>
+
+                </div><!-- blog-posts -->
+            </div><!-- col-lg-4 -->
+
+
+            <div th:replace="sidebar :: sidebar">Sidebar</div>
+
+
+        </div><!-- row -->
+    </div><!-- container -->
+</section><!-- section -->
+
+<div th:replace="footer :: footer">Footer</div>
+
+</body>
+</html>

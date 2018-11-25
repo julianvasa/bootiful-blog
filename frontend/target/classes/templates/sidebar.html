@@ -1,0 +1,88 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    ...
+</head>
+<body>
+<div class="col-lg-4 col-md-12" th:fragment="sidebar">
+    <div class="sidebar-area">
+
+        <div class="sidebar-section about-author center-text">
+            <div class="author-image"><img src="/img/unegatuaj.png" alt="Unegatuaj"></div>
+
+            <h4 class="author-name"><b class="light-color">[[#{about}]]</b></h4>
+            <p>[[#{about-txt}]]</p>
+
+            <a class="read-more-link" href="/about"><b>[[#{read-more}]]</b></a>
+
+        </div><!-- sidebar-section about-author -->
+
+        <div class="sidebar-section src-area">
+
+            <form action="post">
+                <input class="src-input" type="text" th:placeholder="#{search}">
+                <button class="src-btn" type="submit"><i class="ion-ios-search-strong"></i></button>
+            </form>
+
+        </div><!-- sidebar-section src-area -->
+
+        <div class="sidebar-section category-area">
+            <h4 class="title"><b class="light-color">[[#{categories}]]</b></h4>
+            <a class="category" th:href="@{/1/cat/}+${c.id}" th:each="c : ${categories}">
+                <img style="width: 10%; float: left;" th:src="@{${'/img/categories/' + c.image + '.png'}}"
+                     alt="${c.name}">
+                <span style="padding-right: 0;padding-left: 20px;float: left;font-size: 20px;">
+                                [[${c.name}]]</span>
+                <span class="badge badge-warning float-right" th:text="${c.count}"/>
+            </a>
+        </div><!-- sidebar-section category-area -->
+
+        <div class="sidebar-section latest-post-area">
+            <h4 class="title"><b class="light-color">[[#{recent}]]</b></h4>
+
+            <div class="latest-post" th:each="rec : ${recent}">
+                <div class="l-post-image">
+                    <a th:href="@{/recipe/}+${rec.id}"><img th:src="${rec.image}" th:alt="${rec.name}"></a>
+                </div>
+                <div class="post-info">
+                    <a class="btn category-btn" th:if="${rec.name.length()}>25"
+                       th:text="${rec.name.substring(0,25)+'...'}" th:href="@{/recipe/}+${rec.id}"></a>
+                    <a class="btn category-btn" th:if="${rec.name.length()}<=25"
+                       th:text="${rec.name}" th:href="@{/recipe/}+${rec.id}"></a>
+
+                    <h6 class="date" ™><em>[[#{posted}+':
+                        '+${rec.posted.toString().substring(6,8)}+'/'+${rec.posted.toString().substring(4,6)}+'/'+${rec.posted.toString().substring(0,4)}]]</em>
+                    </h6>
+                </div>
+            </div>
+        </div><!-- sidebar-section latest-post-area -->
+
+        <!--<div class="sidebar-section advertisement-area">
+            <h4 class="title"><b class="light-color">Advertisement</b></h4>
+            <a class="advertisement-img" href="#">
+                <img src="images/advertise-1-400x500.jpg" alt="Advertisement Image">
+                <h6 class="btn btn-2 discover-btn">DISCOVER</h6>
+            </a>
+        </div>--><!-- sidebar-section advertisement-area -->
+
+        <div class="sidebar-section instagram-area">
+            <a href="https://play.google.com/store/apps/details?id=com.unegatuaj&amp;pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1">
+                <img alt="Merre në Google Play"
+                     src="https://play.google.com/intl/en_us/badges/images/generic/sq_badge_web_generic.png"></a>
+        </div><!-- sidebar-section instagram-area -->
+
+        <div class="sidebar-section tags-area">
+            <h4 class="title"><b class="light-color">Tags</b></h4>
+            <ul class="tags">
+                <li th:each="tag : ${tagCloud}">
+                    <a class="btn" th:href="@{/search/}+${tag}">[[${tag}]]</a>
+                </li>
+            </ul>
+        </div><!-- sidebar-section tags-area -->
+
+
+    </div><!-- about-author -->
+</div><!-- col-lg-4 -->
+
+</body>
+</html>
