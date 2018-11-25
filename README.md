@@ -19,3 +19,4 @@ Developed a simple blog using:
 The blog has a homepage which displays recent (paginated) recipes.
 The recipes are grouped by categories
 There is a sidebar which shows some recent posts, the categories, a kind of tag cloud, a search.
+
