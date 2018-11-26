@@ -1,11 +1,11 @@
-/Users/julianvasa/Documents/Spring/food-blog/frontend/target/generated-sources/xjc/categories/wsdl/ObjectFactory.java
-/Users/julianvasa/Documents/Spring/food-blog/frontend/target/generated-sources/xjc/categories/wsdl/GetCategoriesRequest.java
-/Users/julianvasa/Documents/Spring/food-blog/frontend/src/main/java/al/recipes/soap/SoapConfiguration.java
-/Users/julianvasa/Documents/Spring/food-blog/frontend/src/main/java/al/recipes/soap/SoapClient.java
-/Users/julianvasa/Documents/Spring/food-blog/frontend/src/main/java/al/recipes/Application.java
-/Users/julianvasa/Documents/Spring/food-blog/frontend/src/main/java/al/recipes/controllers/UserController.java
-/Users/julianvasa/Documents/Spring/food-blog/frontend/target/generated-sources/xjc/categories/wsdl/package-info.java
-/Users/julianvasa/Documents/Spring/food-blog/frontend/src/main/java/al/recipes/controllers/HomeController.java
-/Users/julianvasa/Documents/Spring/food-blog/frontend/src/main/java/al/recipes/controllers/RecipeController.java
-/Users/julianvasa/Documents/Spring/food-blog/frontend/target/generated-sources/xjc/categories/wsdl/Categories.java
-/Users/julianvasa/Documents/Spring/food-blog/frontend/target/generated-sources/xjc/categories/wsdl/GetCategoriesResponse.java
+/Users/julianvasa/Documents/Spring/food blog/frontend/src/main/java/al/recipes/Application.java
+/Users/julianvasa/Documents/Spring/food blog/frontend/src/main/java/al/recipes/soap/SoapClient.java
+/Users/julianvasa/Documents/Spring/food blog/frontend/src/main/java/al/recipes/controllers/HomeController.java
+/Users/julianvasa/Documents/Spring/food blog/frontend/target/generated-sources/xjc/categories/wsdl/ObjectFactory.java
+/Users/julianvasa/Documents/Spring/food blog/frontend/target/generated-sources/xjc/categories/wsdl/Categories.java
+/Users/julianvasa/Documents/Spring/food blog/frontend/src/main/java/al/recipes/soap/SoapConfiguration.java
+/Users/julianvasa/Documents/Spring/food blog/frontend/target/generated-sources/xjc/categories/wsdl/GetCategoriesRequest.java
+/Users/julianvasa/Documents/Spring/food blog/frontend/target/generated-sources/xjc/categories/wsdl/package-info.java
+/Users/julianvasa/Documents/Spring/food blog/frontend/src/main/java/al/recipes/controllers/RecipeController.java
+/Users/julianvasa/Documents/Spring/food blog/frontend/src/main/java/al/recipes/controllers/UserController.java
+/Users/julianvasa/Documents/Spring/food blog/frontend/target/generated-sources/xjc/categories/wsdl/GetCategoriesResponse.java

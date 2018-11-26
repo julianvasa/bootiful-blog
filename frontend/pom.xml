@@ -21,6 +21,7 @@
     </properties>
 
     <dependencies>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
@@ -82,24 +83,7 @@
     </dependencies>
 
     <build>
-        <resources>
-            <resource>
-                <directory>${project.sources}</directory>
-                <filtering>true</filtering>
-                <excludes>
-                    <exclude>**/*.woff</exclude>
-                    <exclude>**/*.ttf</exclude>
-                </excludes>
-            </resource>
-            <resource>
-                <directory>${project.sources}</directory>
-                <filtering>false</filtering>
-                <includes>
-                    <include>**/*.woff</include>
-                    <include>**/*.ttf</include>
-                </includes>
-            </resource>
-        </resources>
+
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>

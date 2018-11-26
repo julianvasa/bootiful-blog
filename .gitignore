@@ -38,3 +38,12 @@ transaction-logs
 secrets.yml
 .gradletasknamecache
 .sts4-cache
+target/
+*.class
+*.jar
+*.war
+*.ear
+*.logs
+*.iml
+.idea/
+.eclipse
