@@ -1,6 +1,6 @@
 package al.recipes.rest.controllers;
 
-import al.recipes.models.Recipe;
+import al.recipes.models.Recipes;
 import al.recipes.services.CategoriesService;
 import al.recipes.services.RecipesService;
 import al.recipes.services.SingleRecipeService;
@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -29,7 +30,7 @@ public class RecipeControllerRest {
     CategoriesService categoriesService;
 
     @GetMapping("/recipes/{page}")
-    public Page<Recipe> getAllRecipes(@PathVariable(value = "page") Integer page) {
+    public Page<Recipes> getAllRecipes(@PathVariable(value = "page") Integer page) {
         int evalPage = (page < 1) ? INITIAL_PAGE : page - 1;
         Sort sort = new Sort(new Sort.Order(Sort.Direction.DESC, "id"));
 
@@ -37,30 +38,35 @@ public class RecipeControllerRest {
     }
 
     @GetMapping("/recipe/{id}")
-    public Optional<Recipe> getRecipeById(@PathVariable(value = "id") long recipeId) {
+    public Optional<Recipes> getRecipeById(@PathVariable(value = "id") long recipeId) {
         return singleRecipeService.findById(recipeId);
     }
 
     @GetMapping("/recipes/{page}/cat/{cat}")
-    public Page<Recipe> getAllRecipesByCat(@PathVariable(value = "page") Integer page, @PathVariable(value = "cat") Integer cat) {
+    public Page<Recipes> getAllRecipesByCat(@PathVariable(value = "page") Integer page, @PathVariable(value = "cat") Integer cat) {
         int evalPage = (page < 1) ? INITIAL_PAGE : page - 1;
         Sort sort = new Sort(new Sort.Order(Sort.Direction.DESC, "id"));
 
         return recipesService.findAllBycategory(cat, new PageRequest(evalPage, INITIAL_PAGE_SIZE, sort));
     }
 
+    @GetMapping("/search/{keyword}")
+    public List<Recipes> search(@PathVariable(value = "keyword") String keyword) {
+        return recipesService.search(keyword);
+    }
+
 /*
     @PostMapping("/recipes")
-    public Recipe createRecipe(@Valid @RequestBody Recipe recipe) {
+    public Recipes createRecipe(@Valid @RequestBody Recipes recipe) {
         return recipesService.save(recipe);
     }
 
 
 
     @PutMapping("/recipes/{id}")
-    public Recipe updateRecipe(@PathVariable(value = "id") Long recipeId, @Valid @RequestBody Recipe recipeDetails) {
+    public Recipes updateRecipe(@PathVariable(value = "id") Long recipeId, @Valid @RequestBody Recipes recipeDetails) {
 
-        Recipe note = recipesService.findById(recipeId);
+        Recipes note = recipesService.findById(recipeId);
 
         note.setName(recipeDetails.getName());
         note.setInstruction(recipeDetails.getInstruction());
@@ -70,7 +76,7 @@ public class RecipeControllerRest {
 
     @DeleteMapping("/recipes/{id}")
     public ResponseEntity<?> deleteRecipe(@PathVariable(value = "id") Long recipeId) {
-        Recipe recipe = recipesService.findById(recipeId);
+        Recipes recipe = recipesService.findById(recipeId);
 
         recipesService.delete(recipe);
 

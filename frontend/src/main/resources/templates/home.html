@@ -27,6 +27,12 @@
                              th:src="@{${'/img/categories/' + currentCat.image + '.png'}}"
                              alt="${currentCat.name}">
                         [[${currentCat.name}]]</p>
+
+                    <p th:if="${searchFilter!=null}" style="font-family: 'Handlee', cursive; font-size:40px;">
+                        [[#{search_results}]]
+                        <span style="color:#FFAD4D;">[[${searchFilter}]]</span>
+                    </p>
+
                     <div class="single-post" th:each="recipe,iter : ${recipes}" th:if="*{iter.index} < 4">
                         <div class=" image-wrapper
                     ">

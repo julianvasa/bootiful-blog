@@ -1,6 +1,6 @@
 package al.recipes.controllers;
 
-import al.recipes.models.Recipe;
+import al.recipes.models.Recipes;
 import al.recipes.rest.controllers.TagControllerRest;
 import al.recipes.soap.SoapClient;
 import categories.wsdl.Categories;
@@ -31,13 +31,15 @@ public class HomeController {
     @Autowired
     private TagControllerRest tagControllerRest;
 
-    @RequestMapping(value = {"/", "/{page}", "/{page}/cat/{cat}"})
-    public String getAllRecipes(Model model, @PathVariable(value = "page") Optional<Integer> p, @PathVariable Optional<Integer> cat) {
-        List<Recipe> recipes = new ArrayList<>();
+    @RequestMapping(value = {"/", "/{page}", "/{page}/cat/{cat}", "/search/{keyword}"})
+    public String getAllRecipes(Model model, @PathVariable(value = "page") Optional<Integer> p, @PathVariable Optional<Integer> cat,
+            @PathVariable(value = "keyword") Optional<String> searchFilter) {
+        List<Recipes> recipes = new ArrayList<>();
         List<String> tags = new ArrayList<>();
         List<Categories> categories = new ArrayList<>();
-        List<Recipe> recent_recipes = new ArrayList<>();
-
+        List<Recipes> recent_recipes = new ArrayList<>();
+        ResponseEntity<PagedResources<Recipes>> response = null;
+        ResponseEntity<List<Recipes>> response_list = null;
         RestTemplate restTemplate = new RestTemplate();
         GetCategoriesResponse soapResponse = categorySoapClient.getCategories();
         soapResponse.getCategories().forEach(categories::add);
@@ -56,20 +58,40 @@ public class HomeController {
             link_more = "/" + (page + 1) + "/cat/" + cat.get();
             currentCat = soapResponse.getCategories().stream().filter(c -> c.getId() == cat.get()).findFirst().get();
         }
-        ResponseEntity<PagedResources<Recipe>> response =
-                restTemplate.exchange(main_url,
-                        HttpMethod.GET, null, new ParameterizedTypeReference<PagedResources<Recipe>>() {
-                        }
-                );
-        Collection<Recipe> recipes_arr = Objects.requireNonNull(response.getBody()).getContent();
-        recipes_arr.stream().limit(20).forEach(recipes::add);
 
-        ResponseEntity<PagedResources<Recipe>> recent_response =
+        if (searchFilter.isPresent()) {
+            main_url = "http://localhost/api/search/" + searchFilter.get();
+            next_url = "";
+            link_more = "#";
+            currentCat = null;
+
+            response_list =
+                    restTemplate.exchange(main_url,
+                            HttpMethod.GET, null, new ParameterizedTypeReference<List<Recipes>>() {
+                            }
+                    );
+            Collection<Recipes> recipes_arr = Objects.requireNonNull(response_list.getBody());
+            recipes_arr.stream().limit(20).forEach(recipes::add);
+
+        }
+        else {
+            response =
+                    restTemplate.exchange(main_url,
+                            HttpMethod.GET, null, new ParameterizedTypeReference<PagedResources<Recipes>>() {
+                            }
+                    );
+            Collection<Recipes> recipes_arr = Objects.requireNonNull(response.getBody()).getContent();
+            recipes_arr.stream().limit(20).forEach(recipes::add);
+
+        }
+
+
+        ResponseEntity<PagedResources<Recipes>> recent_response =
                 restTemplate.exchange(recent_url,
-                        HttpMethod.GET, null, new ParameterizedTypeReference<PagedResources<Recipe>>() {
+                        HttpMethod.GET, null, new ParameterizedTypeReference<PagedResources<Recipes>>() {
                         }
                 );
-        Collection<Recipe> recent_recipes_arr = Objects.requireNonNull(recent_response.getBody()).getContent();
+        Collection<Recipes> recent_recipes_arr = Objects.requireNonNull(recent_response.getBody()).getContent();
         recent_recipes_arr.stream().limit(10).forEach(recent_recipes::add);
 
         ResponseEntity<List<String>> tags_response =
@@ -80,20 +102,28 @@ public class HomeController {
         Collection<String> tags_arr = Objects.requireNonNull(tags_response.getBody());
         tags_arr.stream().limit(20).forEach(tags::add);
 
-        ResponseEntity<PagedResources<Recipe>> response_next =
-                restTemplate.exchange(next_url,
-                        HttpMethod.GET, null, new ParameterizedTypeReference<PagedResources<Recipe>>() {
-                        }
-                );
-        if (Objects.requireNonNull(response_next.getBody()).getContent().size() > 0) {
-            model.addAttribute("link_more", link_more);
+        if (!next_url.isEmpty()) {
+            ResponseEntity<PagedResources<Recipes>> response_next =
+                    restTemplate.exchange(next_url,
+                            HttpMethod.GET, null, new ParameterizedTypeReference<PagedResources<Recipes>>() {
+                            }
+                    );
+
+            if (Objects.requireNonNull(response_next.getBody()).getContent().size() > 0) {
+                model.addAttribute("link_more", link_more);
+            }
+            else {
+                model.addAttribute("link_more", "#");
+            }
         }
         else {
             model.addAttribute("link_more", "#");
         }
-
         if (currentCat != null) {
             model.addAttribute("currentCat", currentCat);
+        }
+        if (searchFilter.isPresent()) {
+            model.addAttribute("searchFilter", searchFilter.get());
         }
         model.addAttribute("recent", recent_recipes);
         model.addAttribute("tagCloud", tags);

@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/")
+@RequestMapping("/api")
 public class CategoryControllerRest {
 
     private static final int INITIAL_PAGE = 0;
@@ -27,16 +27,16 @@ public class CategoryControllerRest {
 
 /*
     @PostMapping("/recipes")
-    public Recipe createRecipe(@Valid @RequestBody Recipe recipe) {
+    public Recipes createRecipe(@Valid @RequestBody Recipes recipe) {
         return recipesService.save(recipe);
     }
 
 
 
     @PutMapping("/recipes/{id}")
-    public Recipe updateRecipe(@PathVariable(value = "id") Long recipeId, @Valid @RequestBody Recipe recipeDetails) {
+    public Recipes updateRecipe(@PathVariable(value = "id") Long recipeId, @Valid @RequestBody Recipes recipeDetails) {
 
-        Recipe note = recipesService.findById(recipeId);
+        Recipes note = recipesService.findById(recipeId);
 
         note.setName(recipeDetails.getName());
         note.setInstruction(recipeDetails.getInstruction());
@@ -46,7 +46,7 @@ public class CategoryControllerRest {
 
     @DeleteMapping("/recipes/{id}")
     public ResponseEntity<?> deleteRecipe(@PathVariable(value = "id") Long recipeId) {
-        Recipe recipe = recipesService.findById(recipeId);
+        Recipes recipe = recipesService.findById(recipeId);
 
         recipesService.delete(recipe);
 

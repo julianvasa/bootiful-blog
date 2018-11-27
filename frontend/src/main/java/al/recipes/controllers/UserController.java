@@ -12,9 +12,9 @@ public class UserController {
 
     @GetMapping
     public String index(Model model) {    	
-    	/*List<Recipe> recipes = new ArrayList<Recipe>();
-    	List<Recipe> latest10Recipes = recipeService.findLatest10();
-    	for (Recipe recipe : latest10Recipes) {
+    	/*List<Recipes> recipes = new ArrayList<Recipes>();
+    	List<Recipes> latest10Recipes = recipeService.findLatest10();
+    	for (Recipes recipe : latest10Recipes) {
     		Random rand = new Random(); 
         	int index = rand.nextInt(cssClass.length); 
         	recipe.setCssClassText(cssClassText[index]);

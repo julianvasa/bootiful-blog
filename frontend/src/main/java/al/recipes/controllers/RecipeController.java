@@ -1,6 +1,6 @@
 package al.recipes.controllers;
 
-import al.recipes.models.Recipe;
+import al.recipes.models.Recipes;
 import al.recipes.models.Tags;
 import al.recipes.rest.controllers.TagControllerRest;
 import al.recipes.soap.SoapClient;
@@ -34,17 +34,17 @@ public class RecipeController {
 
     @GetMapping("/recipe/{id}")
     public String index(Model model, @PathVariable long id) {
-        List<Recipe> recipes = new ArrayList<>();
+        List<Recipes> recipes = new ArrayList<>();
         List<Categories> categories = new ArrayList<>();
         List<String> tagCloud = new ArrayList<>();
-        List<Recipe> recent_recipes = new ArrayList<>();
+        List<Recipes> recent_recipes = new ArrayList<>();
 
         RestTemplate restTemplate = new RestTemplate();
         String main_url = "http://localhost/api/recipe/" + id;
         String tag_cloud_url = "http://localhost/api/tags";
         String recent_url = "http://localhost/api/recipes/1";
 
-        Recipe recipe = restTemplate.getForObject(main_url, Recipe.class, 200);
+        Recipes recipe = restTemplate.getForObject(main_url, Recipes.class, 200);
         List<Tags> tags = Objects.requireNonNull(recipe).getTags();
         tags.sort(Comparator.comparingInt(Tags::getStart_pos));
         GetCategoriesResponse soapResponse = categorySoapClient.getCategories();
@@ -60,12 +60,12 @@ public class RecipeController {
         Collection<String> tags_arr = Objects.requireNonNull(tags_response.getBody());
         tags_arr.stream().limit(20).forEach(tagCloud::add);
 
-        ResponseEntity<PagedResources<Recipe>> recent_response =
+        ResponseEntity<PagedResources<Recipes>> recent_response =
                 restTemplate.exchange(recent_url,
-                        HttpMethod.GET, null, new ParameterizedTypeReference<PagedResources<Recipe>>() {
+                        HttpMethod.GET, null, new ParameterizedTypeReference<PagedResources<Recipes>>() {
                         }
                 );
-        Collection<Recipe> recent_recipes_arr = Objects.requireNonNull(recent_response.getBody()).getContent();
+        Collection<Recipes> recent_recipes_arr = Objects.requireNonNull(recent_response.getBody()).getContent();
         recent_recipes_arr.stream().limit(10).forEach(recent_recipes::add);
 
         int start_pos = 0;
