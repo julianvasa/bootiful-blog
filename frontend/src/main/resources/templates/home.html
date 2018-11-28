@@ -45,9 +45,9 @@
                                 <span th:if="${recipe.time.length()>2}"><strong>[[#{time}]]:&nbsp;</strong>[[${recipe.time}]]
                                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
                                 <span th:if="${recipe.calories.length()>2}"><strong>[[#{difficulty}]]:&nbsp;</strong>[[${recipe.calories}]]</span>
-                                <br>
-                            </p>
 
+                            </p>
+                            <br th:if="${recipe.servings.length()>2} or ${recipe.time.length()>2} or ${recipe.calories.length()>2}">
                             <a th:href="@{/recipe/}+${recipe.id}"><img th:src="${recipe.image}"/></a></div>
 
                         <div class="icons">
@@ -90,8 +90,9 @@
                                     <span th:if="${recipe.servings.length()>2}"><strong>[[#{servings}]]:&nbsp;</strong>[[${recipe.servings}]]<br></span>
                                     <span th:if="${recipe.time.length()>2}"><strong>[[#{time}]]:&nbsp;</strong>[[${recipe.time}]]<br></span>
                                     <span th:if="${recipe.calories.length()>2}"><strong>[[#{difficulty}]]:&nbsp;</strong>[[${recipe.calories}]]</span>
-                                    <br>
                                 </p>
+                                <br th:if="${recipe.servings.length()>2} or ${recipe.time.length()>2} or ${recipe.calories.length()>2}">
+
                                 <div class="image-wrapper"><a th:href="@{/recipe/}+${recipe.id}"><img
                                         th:src="${recipe.image}"/></a>
                                 </div>

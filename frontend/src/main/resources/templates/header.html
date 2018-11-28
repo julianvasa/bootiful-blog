@@ -50,10 +50,11 @@
 
         <ul class="main-menu visible-on-click" id="main-menu">
             <li><a href="/">HOME</a></li>
-            <li class="drop-down"><a href="#">[[#{categories}]]<i class="ion-ios-arrow-down"></i></a>
+            <li class="drop-down"><a href="#">[[${#strings.toUpperCase('__#{categories}__')}]]<i
+                    class="ion-ios-arrow-down"></i></a>
                 <ul class="drop-down-menu">
                     <li th:each="cat : ${categories}"><span
-                            class="badge badge-warning float-right mt-3" style="margin-right: 5px;"
+                            class="badge badge-warning float-right mt-3" style="margin-right: 20px;"
                             th:text="${cat.count}"></span><a th:href="@{/1/cat/}+${cat.id}"
                                                              th:text="${cat.name}"></a>
                     </li>

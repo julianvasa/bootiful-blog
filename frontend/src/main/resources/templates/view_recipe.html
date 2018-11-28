@@ -36,8 +36,8 @@
                                 <span th:if="${recipe.time.length()>2}"><strong>[[#{time}]]:&nbsp;</strong>[[${recipe.time}]]
                                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
                                 <span th:if="${recipe.calories.length()>2}"><strong>[[#{difficulty}]]:&nbsp;</strong>[[${recipe.calories}]]</span>
-                                <br>
                             </p>
+                            <br th:if="${recipe.servings.length()>2} or ${recipe.time.length()>2} or ${recipe.calories.length()>2}">
                             <img th:src="${recipe.image}"/>
                         </div>
 
