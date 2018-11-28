@@ -1,6 +1,7 @@
 package al.recipes.controllers;
 
 import al.recipes.models.Recipes;
+import al.recipes.models.Tags;
 import al.recipes.rest.controllers.TagControllerRest;
 import al.recipes.soap.SoapClient;
 import categories.wsdl.Categories;
@@ -71,7 +72,10 @@ public class HomeController {
                             }
                     );
             Collection<Recipes> recipes_arr = Objects.requireNonNull(response_list.getBody());
-            recipes_arr.stream().limit(20).forEach(recipes::add);
+            recipes_arr.stream().limit(20).forEach(r -> {
+                r = setTagsIntro(r);
+                recipes.add(r);
+            });
 
         }
         else {
@@ -81,7 +85,10 @@ public class HomeController {
                             }
                     );
             Collection<Recipes> recipes_arr = Objects.requireNonNull(response.getBody()).getContent();
-            recipes_arr.stream().limit(20).forEach(recipes::add);
+            recipes_arr.stream().limit(20).forEach(r -> {
+                r = setTagsIntro(r);
+                recipes.add(r);
+            });
 
         }
 
@@ -130,6 +137,33 @@ public class HomeController {
         model.addAttribute("recipes", recipes);
         model.addAttribute("categories", categories);
         return "home";
+    }
+
+    private Recipes setTagsIntro(Recipes p) {
+        RestTemplate restTemplate = new RestTemplate();
+        Recipes recipe = restTemplate.getForObject("http://localhost/api/recipe/" + p.getId(), Recipes.class, 200);
+        List<Tags> tags = Objects.requireNonNull(recipe).getTags();
+        tags.sort(Comparator.comparingInt(Tags::getStart_pos));
+
+        int start_pos = 0;
+        int start_pos2 = 0;
+        for (Tags tag : tags) {
+            if (tag.getIntro_instruction().equals("intro")) {
+                StringBuffer ins = new StringBuffer(p.getIntro());
+                if (!ins.substring(tag.getStart_pos() + start_pos, tag.getEnd_pos() + start_pos).contains("<a") &&
+                        !ins.substring(tag.getStart_pos() + start_pos2, tag.getEnd_pos() + start_pos2).contains("<a")) {
+
+                    p.setIntro(ins.replace(
+                            (tag.getStart_pos() + start_pos),
+                            (tag.getEnd_pos() + start_pos),
+                            "<a class='tags' href='/search/" + tag.getValue() + "'>" + tag.getValue() + "</a>"
+                    ).toString());
+                    start_pos2 = start_pos;
+                    start_pos += ("<a class='tags' href='/search/" + tag.getValue() + "'>" + "</a>").length();
+                }
+            }
+        }
+        return p;
     }
 
     /*private String translate(String txtToBeTranslated) {

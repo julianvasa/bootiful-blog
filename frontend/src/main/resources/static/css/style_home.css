@@ -408,6 +408,8 @@ header .main-menu li.drop-down a.mouseover + ul.drop-down-menu{ display: block;
 
 /* TAGS */
 
+.tags{ display: inline-block; text-decoration: none; color: #FFAD4D ; }
+
 .tags-area .tags{ overflow: hidden; }
 
 .tags-area .tags > li{ float: left; margin: 0 5px 5px 0; }

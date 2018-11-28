@@ -29,12 +29,15 @@
                             <h3 class="title">
                                 <span th:text="${recipe.name}"/>
                             </h3>
-                            <p style="font-size:14px;"><strong>[[#{servings}]]:&nbsp;</strong>[[${recipe.servings}]]
-                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                <strong>[[#{time}]]:&nbsp;</strong>[[${recipe.time}]]
-                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                <strong>[[#{difficulty}]]:&nbsp;</strong>[[${recipe.calories}]]</p>
-                            <br>
+                            <p style="font-size:14px;"
+                               th:if="${recipe.servings.length()>2} or ${recipe.time.length()>2} or ${recipe.calories.length()>2}"><span
+                                    th:if="${recipe.servings.length()>2}"><strong>[[#{servings}]]:&nbsp;</strong>[[${recipe.servings}]]
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                <span th:if="${recipe.time.length()>2}"><strong>[[#{time}]]:&nbsp;</strong>[[${recipe.time}]]
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                <span th:if="${recipe.calories.length()>2}"><strong>[[#{difficulty}]]:&nbsp;</strong>[[${recipe.calories}]]</span>
+                                <br>
+                            </p>
                             <img th:src="${recipe.image}"/>
                         </div>
 
