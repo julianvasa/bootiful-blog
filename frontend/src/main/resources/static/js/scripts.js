@@ -42,10 +42,10 @@
 	
 	var winWidth = $(window).width();
 	dropdownMenu(winWidth);
-	
+
 	$(window).on('resize', function(){
 		dropdownMenu(winWidth);
-		
+
 	});
 	
 	// Circular Progress Bar
@@ -114,6 +114,7 @@ function countdownTime(){
 		});
 	}
 }
+
 function dropdownMenu(winWidth){
 	
 	if(winWidth > 767){
@@ -204,3 +205,25 @@ function isExists(elem){
 	}
 	return false;
 }
+
+function submitSearchTop(){
+   if ($('#top-search').val() !== '') {
+        window.location.href = "/search/"+$('#top-search').val();
+   }
+}
+
+document.querySelector("#form-search-top").addEventListener("submit", function(e){
+    e.preventDefault();    //stop form from submitting
+    submitSearchTop();
+});
+
+function submitSearchMain(){
+   if ($('#main-search').val() !== '') {
+        window.location.href = "/search/"+$('#main-search').val();
+   }
+}
+
+document.querySelector("#form-search-main").addEventListener("submit", function(e){
+    e.preventDefault();    //stop form from submitting
+    submitSearchTop();
+});

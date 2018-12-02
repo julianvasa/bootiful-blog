@@ -18,12 +18,12 @@
         </div><!-- sidebar-section about-author -->
 
         <div class="sidebar-section src-area">
-
-            <form action="post">
-                <input class="src-input" type="text" th:placeholder="#{search}">
-                <button class="src-btn" type="submit"><i class="ion-ios-search-strong"></i></button>
+            <form name="form-search-main" id="form-search-main">
+                <input class="src-input" type="text" th:placeholder="#{search}" id="main-search">
+                <button class="src-btn" type="submit" onclick="submitSearchMain()">
+                    <i
+                            class="ion-ios-search-strong"></i></button>
             </form>
-
         </div><!-- sidebar-section src-area -->
 
         <div class="sidebar-section category-area">

@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>[[#{header_txt}]]</title>
+    <title>[[${page_title}]]</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta charset="UTF-8">
@@ -12,6 +12,7 @@
     <link href="/css/styles.css" rel="stylesheet">
     <link href="/css/style_home.css" rel="stylesheet">
     <link href="/css/responsive.css" rel="stylesheet">
+
 </head>
 <body>
 <div th:replace="header :: header">Header</div>
@@ -39,15 +40,16 @@
                             <h3 class="title"><a th:href="@{/recipe/}+${recipe.id}" th:text="${recipe.name}"><b
                                     class="light-color"></b></a></h3>
                             <p style="font-size:14px;"
-                               th:if="${recipe.servings.length()>2} or ${recipe.time.length()>2} or ${recipe.calories.length()>2}"><span
-                                    th:if="${recipe.servings.length()>2}"><strong>[[#{servings}]]:&nbsp;</strong>[[${recipe.servings}]]
+                               th:if="(${recipe.servings}!=null and ${recipe.servings.length()>2}) or (${recipe.time}!=null and ${recipe.time.length()>2}) or (${recipe.calories}!=null and ${recipe.calories.length()>2})">
+                                <span
+                                        th:if="(${recipe.servings}!=null and ${recipe.servings.length()>2})"><strong>[[#{servings}]]:&nbsp;</strong>[[${recipe.servings}]]
                                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                                <span th:if="${recipe.time.length()>2}"><strong>[[#{time}]]:&nbsp;</strong>[[${recipe.time}]]
+                                <span th:if="(${recipe.time}!=null and ${recipe.time.length()>2})"><strong>[[#{time}]]:&nbsp;</strong>[[${recipe.time}]]
                                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                                <span th:if="${recipe.calories.length()>2}"><strong>[[#{difficulty}]]:&nbsp;</strong>[[${recipe.calories}]]</span>
+                                <span th:if="(${recipe.calories.length()>2} and ${recipe.calories}!=null)"><strong>[[#{difficulty}]]:&nbsp;</strong>[[${recipe.calories}]]</span>
 
                             </p>
-                            <br th:if="${recipe.servings.length()>2} or ${recipe.time.length()>2} or ${recipe.calories.length()>2}">
+                            <br th:if="(${recipe.servings}!=null and ${recipe.servings.length()>2}) or (${recipe.time}!=null and ${recipe.time.length()>2}) or (${recipe.calories}!=null and ${recipe.calories.length()>2})">
                             <a th:href="@{/recipe/}+${recipe.id}"><img th:src="${recipe.image}"/></a></div>
 
                         <div class="icons">
@@ -86,12 +88,13 @@
                                 <h3 class="title"><a th:href="@{/recipe/}+${recipe.id}" th:text="${recipe.name}"><b
                                         class="light-color"></b></a></h3>
                                 <p style="font-size:14px;"
-                                   th:if="${recipe.servings.length()>2} or ${recipe.time.length()>2} or ${recipe.calories.length()>2}">
-                                    <span th:if="${recipe.servings.length()>2}"><strong>[[#{servings}]]:&nbsp;</strong>[[${recipe.servings}]]<br></span>
-                                    <span th:if="${recipe.time.length()>2}"><strong>[[#{time}]]:&nbsp;</strong>[[${recipe.time}]]<br></span>
-                                    <span th:if="${recipe.calories.length()>2}"><strong>[[#{difficulty}]]:&nbsp;</strong>[[${recipe.calories}]]</span>
+                                   th:if="(${recipe.servings}!=null and ${recipe.servings.length()>2}) or (${recipe.time}!=null and ${recipe.time.length()>2}) or (${recipe.calories}!=null and ${recipe.calories.length()>2})">
+                                    <span th:if="(${recipe.servings}!=null and ${recipe.servings.length()>2})"><strong>[[#{servings}]]:&nbsp;</strong>[[${recipe.servings}]]<br></span>
+                                    <span th:if="(${recipe.time}!=null and ${recipe.time.length()>2})"><strong>[[#{time}]]:&nbsp;</strong>[[${recipe.time}]]<br></span>
+                                    <span th:if="(${recipe.calories.length()>2} and ${recipe.calories}!=null)"><strong>[[#{difficulty}]]:&nbsp;</strong>[[${recipe.calories}]]</span>
                                 </p>
-                                <br th:if="${recipe.servings.length()>2} or ${recipe.time.length()>2} or ${recipe.calories.length()>2}">
+                                <br th:if="(${recipe.servings}!=null and ${recipe.servings.length()>2}) or (${recipe.time}!=null and ${recipe.time.length()>2}) or (${recipe.calories}!=null and ${recipe.calories.length()>2})">
+
 
                                 <div class="image-wrapper"><a th:href="@{/recipe/}+${recipe.id}"><img
                                         th:src="${recipe.image}"/></a>
@@ -128,7 +131,7 @@
 
                     </div><!-- row -->
 
-                    <a th:if="${link_more}!='#'" class="btn load-more-btn" th:href="${link_more}">[[#{older}]]</a>
+                    <a th:if="${link_more}!='#'" class="btn load-more-btn" th:href="${link_more}">[[${#strings.toUpperCase('__#{older}__')}]]</a>
 
                 </div><!-- blog-posts -->
             </div><!-- col-lg-4 -->

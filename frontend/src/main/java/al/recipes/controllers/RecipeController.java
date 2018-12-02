@@ -34,7 +34,7 @@ public class RecipeController {
 
     @GetMapping("/recipe/{id}")
     public String index(Model model, @PathVariable long id) {
-        List<Recipes> recipes = new ArrayList<>();
+        List<Recipes> recipes = new ArrayList<Recipes>();
         List<Categories> categories = new ArrayList<>();
         List<String> tagCloud = new ArrayList<>();
         List<Recipes> recent_recipes = new ArrayList<>();
@@ -115,5 +115,11 @@ public class RecipeController {
         model.addAttribute("categories", categories);
 
         return "view_recipe";
+    }
+
+    @GetMapping("/add")
+    public String index(Model model) {
+
+        return "create_recipe.html";
     }
 }

@@ -9,6 +9,7 @@ import categories.wsdl.GetCategoriesResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.hateoas.PagedResources;
 import org.springframework.http.HttpMethod;
@@ -31,10 +32,16 @@ public class HomeController {
     private SoapClient categorySoapClient;
     @Autowired
     private TagControllerRest tagControllerRest;
+    @Autowired
+    private MessageSource messageSource;
 
     @RequestMapping(value = {"/", "/{page}", "/{page}/cat/{cat}", "/search/{keyword}"})
     public String getAllRecipes(Model model, @PathVariable(value = "page") Optional<Integer> p, @PathVariable Optional<Integer> cat,
-            @PathVariable(value = "keyword") Optional<String> searchFilter) {
+            @PathVariable(value = "keyword") Optional<String> searchFilter, Locale locale) {
+
+        final String header_txt = messageSource.getMessage("header_txt", null, locale);
+        final String search_results = messageSource.getMessage("search_results", null, locale);
+
         List<Recipes> recipes = new ArrayList<>();
         List<String> tags = new ArrayList<>();
         List<Categories> categories = new ArrayList<>();
@@ -129,13 +136,24 @@ public class HomeController {
         if (currentCat != null) {
             model.addAttribute("currentCat", currentCat);
         }
+
         if (searchFilter.isPresent()) {
             model.addAttribute("searchFilter", searchFilter.get());
         }
+
         model.addAttribute("recent", recent_recipes);
         model.addAttribute("tagCloud", tags);
         model.addAttribute("recipes", recipes);
         model.addAttribute("categories", categories);
+        if (searchFilter.isPresent()) {
+            model.addAttribute("page_title", search_results + " " + searchFilter.get());
+        }
+        else if (currentCat != null) {
+            model.addAttribute("page_title", currentCat.getName());
+        }
+        else {
+            model.addAttribute("page_title", header_txt);
+        }
         return "home";
     }
 

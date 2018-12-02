@@ -13,31 +13,49 @@
 
             <ul class="left-area welcome-area">
                 <li class="hello-blog">[[#{header_txt}]]</li>
-                <li><a href="mailto:vasa.julian@gmail.com">vasa.julian@gmail.com</a></li>
+                <li><a
+                        th:href="@{/}">Home</a>
+                    <span th:if="${currentCat!=null}">&nbsp;&nbsp;<i
+                            class="ion-chevron-right"></i>&nbsp;&nbsp;<a th:href="@{/1/cat/}+${currentCat.id}">[[${currentCat.name}]]</a></span>
+                    <span th:if="${recipe!=null}">&nbsp;&nbsp;<i
+                            class="ion-chevron-right"></i>&nbsp;&nbsp;[[${recipe.name}]]</span>
+                    <span th:if="${page.isPresent()} and ${page.get()}>1">&nbsp;&nbsp;<i
+                            class="ion-chevron-right"></i>&nbsp;&nbsp;[[${page.get()}]]</span>
+                    <span th:if="${searchFilter!=null}">&nbsp;&nbsp;<i
+                            class="ion-chevron-right"></i>&nbsp;&nbsp;[[#{search_results}]]&nbsp;<span
+                            style="color:#FFAD4D;">[[${searchFilter}]]</span></span>
+
+                </li>
             </ul><!-- left-area -->
 
 
             <div class="right-area">
 
                 <div class="src-area">
-                    <form action="post">
-                        <input class="src-input" type="text" th:placeholder="#{search}">
-                        <button class="src-btn" type="submit"><i class="ion-ios-search-strong"></i></button>
+                    <form name="form-search-top" id="form-search-top">
+                        <input class="src-input" type="text" th:placeholder="#{search}" id="top-search">
+                        <button class="src-btn" type="submit" onclick="submitSearchTop()">
+                            <i
+                                    class="ion-ios-search-strong"></i></button>
                     </form>
                 </div><!-- src-area -->
 
                 <ul class="social-icons">
-                    <li><a target="_blank" href="https://github.com/julianvasa">
-                        <i class="ion-social-github"></i></a></li>
-                    <li><a href="?lang=sq">AL &nbsp;<img src="/img/al_rounded.png" alt="Shqip"
-                                                         style="width:20px;"/></a></li>
-                    <li><a href="?lang=en">EN &nbsp;<img src="/img/en_rounded.png" alt="English"
-                                                         style="width:20px"/></a></li>
+                    <li><a href="?lang=sq"><img src="/img/al_rounded.png" alt="Shqip"/></a></li>
+                    <li><a href="?lang=en"><img src="/img/en_rounded.png" alt="English"/></a></li>
+                </ul>
 
-                </ul><!-- right-area -->
+                <!-- right-area -->
 
             </div><!-- right-area -->
-
+            <div class="right-area">
+                <span th:if="${link_more}!='#'" style="float:right;">
+                    <a th:href="${link_more}"
+                       style="margin-right:20px;">[[${#strings.capitalize('__#{older}__')}]]
+                        <span th:if="${currentCat!=null}">[[#{in_cat}]]&nbsp;[[${#strings.toLowerCase(currentCat.name)}]]</span>
+                    &nbsp;&nbsp;<i class="ion-chevron-right"></i></a>
+                </span>
+            </div>
         </div><!-- top-menu -->
     </nav>
 
@@ -61,8 +79,8 @@
 
                 </ul>
             </li>
-            <li><a href="#">[[#{add}]]</a></li>
-            <li><a href="#">[[#{about}]]</a></li>
+            <li><a href="/add">[[#{add}]]</a></li>
+            <li><a href="/about">[[#{about}]]</a></li>
         </ul><!-- main-menu -->
 
     </div><!-- conatiner -->
