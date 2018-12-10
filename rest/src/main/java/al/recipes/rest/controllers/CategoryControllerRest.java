@@ -12,12 +12,12 @@ import java.util.List;
 @RestController
 @RequestMapping("/api")
 public class CategoryControllerRest {
-
+    
     private static final int INITIAL_PAGE = 0;
     private static final int INITIAL_PAGE_SIZE = 20;
     @Autowired
     CategoriesService categoriesService;
-
+    
     @GetMapping("/categories")
     public List<Categories> getAllCategories() {
         return categoriesService.findAll();

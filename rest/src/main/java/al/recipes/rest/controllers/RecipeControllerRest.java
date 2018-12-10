@@ -19,7 +19,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api")
 public class RecipeControllerRest {
-
+    
     private static final int INITIAL_PAGE = 0;
     private static final int INITIAL_PAGE_SIZE = 20;
     @Autowired
@@ -28,28 +28,34 @@ public class RecipeControllerRest {
     SingleRecipeService singleRecipeService;
     @Autowired
     CategoriesService categoriesService;
-
+    
     @GetMapping("/recipes/{page}")
     public Page<Recipes> getAllRecipes(@PathVariable(value = "page") Integer page) {
+        /*if (!SecurityContextHolder.getContext()
+                .getAuthentication()
+                .getPrincipal().equals("anonymousUser")) {
+            int evalPage = (page < 1) ? INITIAL_PAGE : page - 1;
+            Sort sort = new Sort(new Sort.Order(Sort.Direction.DESC, "id"));
+            return recipesService.findAll(new PageRequest(evalPage, INITIAL_PAGE_SIZE, sort));
+        } else return null;*/
         int evalPage = (page < 1) ? INITIAL_PAGE : page - 1;
         Sort sort = new Sort(new Sort.Order(Sort.Direction.DESC, "id"));
-
         return recipesService.findAll(new PageRequest(evalPage, INITIAL_PAGE_SIZE, sort));
     }
-
+    
     @GetMapping("/recipe/{id}")
     public Optional<Recipes> getRecipeById(@PathVariable(value = "id") long recipeId) {
         return singleRecipeService.findById(recipeId);
     }
-
+    
     @GetMapping("/recipes/{page}/cat/{cat}")
     public Page<Recipes> getAllRecipesByCat(@PathVariable(value = "page") Integer page, @PathVariable(value = "cat") Integer cat) {
         int evalPage = (page < 1) ? INITIAL_PAGE : page - 1;
         Sort sort = new Sort(new Sort.Order(Sort.Direction.DESC, "id"));
-
+        
         return recipesService.findAllBycategory(cat, new PageRequest(evalPage, INITIAL_PAGE_SIZE, sort));
     }
-
+    
     @GetMapping("/search/{keyword}")
     public List<Recipes> search(@PathVariable(value = "keyword") String keyword) {
         return recipesService.search(keyword);

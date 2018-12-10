@@ -1,55 +1,60 @@
 <!DOCTYPE html>
 <html
-        xmlns:th="http://www.thymeleaf.org"
         lang="en"
-        xmlns="http://www.w3.org/1999/xhtml">
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Login</title>
-    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" id="bootstrap-css" rel="stylesheet">
 
 </head>
 <body style="background-image: url(https://unegatuaj960568913.files.wordpress.com/2018/06/pattern.jpg);">
 
 <div class="container">
     <div style="margin: 0 auto; width: 200px;"><a href="/"><img src="/img/logo.png"></a></div>
-    <div id="loginbox" style="margin-top: 20px;" class="mainbox col-lg-6 offset-md-3 col-md-8 offset-sm-2">
+    <div class="mainbox col-lg-6 offset-md-3 col-md-8 offset-sm-2" id="loginbox" style="margin-top: 20px;">
         <div class="card card-inverse card-info">
             <div class="card-header">
                 <div class="card-title" style="float:left;">[[#{signin}]]</div>
                 <div style="float: right; font-size: 80%; position: relative;"><a href="#">[[#{forgot_pass}]]</a>
                 </div>
             </div>
-            <div style="padding-top: 30px;" class="card-block">
-                <div th:if="${param.logout}">
+            <div class="card-block" style="padding-top: 30px;">
+                <div class="alert alert-success" style="border-radius:0" th:if="${logout}">
                     [[#{just_logout}]]
                 </div>
-                <div id="login-alert" class="alert alert-danger col-md-12"
+                <div class="alert alert-danger" id="login-alert" style="border-radius:0"
                      th:if="${loginError}">[[#{invalid_pass}]]
                 </div>
-                <form id="loginform" role="form" style="width: 90%; margin: 0 auto;"
-                      th:action="@{/login}" method="post">
-                    <div style="margin-bottom: 25px;" class="input-group"><span class="input-group-addon"><i
+                <div class="alert alert-danger" style="border-radius:0"
+                     th:if="${denied}">[[#{denied}]]
+                </div>
+                
+                <form id="loginform" method="post" role="form"
+                      style="width: 90%; margin: 0 auto;" th:action="@{/login}">
+                    <div class="input-group" style="margin-bottom: 25px;"><span class="input-group-addon"><i
                             class="glyphicon glyphicon-user"></i></span>
                         <input
-                                id="login-username" type="text" class="form-control" name="username" value=""
-                                th:placeholder="#{username}"/>
+                                class="form-control" id="login-username" name="username" th:placeholder="#{username}"
+                                type="text"
+                                value=""/>
                     </div>
-                    <div style="margin-bottom: 25px;" class="input-group"><span class="input-group-addon"><i
+                    <div class="input-group" style="margin-bottom: 25px;"><span class="input-group-addon"><i
                             class="glyphicon glyphicon-lock"></i></span>
                         <input
-                                id="login-password" type="password" class="form-control" name="password"
-                                th:placeholder="#{password}"/>
+                                class="form-control" id="login-password" name="password" th:placeholder="#{password}"
+                                type="password"/>
                     </div>
                     <div class="input-group">
                         <div class="form-check">
                             <label>
-                                <input id="login-remember" type="checkbox" name="remember" value="1"/>[[#{remember_me}]]</label>
+                                <input id="login-remember" name="remember" type="checkbox" value="1"/>[[#{remember_me}]]</label>
                         </div>
                     </div>
-                    <div style="margin-top: 10px;" class="form-group">
+                    <div class="form-group" style="margin-top: 10px;">
                         <!-- Button -->
-                        <div class="col-md-12 controls"><input type="submit" class="btn-primary" value="Sign In"/>
+                        <div class="col-md-12 controls"><input class="btn-primary" type="submit" value="Sign In"/>
                         </div>
                     </div>
                     <div class="form-group">
@@ -66,47 +71,49 @@
             </div>
         </div>
     </div>
-    <div id="signupbox" style="display: none; margin-top: 50px;"
-         class="mainbox col-lg-6 offset-md-3 col-md-8 offset-sm-2">
+    <div class="mainbox col-lg-6 offset-md-3 col-md-8 offset-sm-2" id="signupbox"
+         style="display: none; margin-top: 50px;">
         <div class="card card-inverse card-info">
             <div class="card-header">
                 <div class="card-title" style="float:left;">[[#{signup}]]</div>
                 <div style="float: right; font-size: 85%; position: relative;">
-                    <a id="signinlink" href="#"
+                    <a href="#" id="signinlink"
                        onclick="$('#signupbox').hide(); $('#loginbox').show()">[[#{signin}]]</a>
                 </div>
             </div>
             <div class="card-block">
-                <form id="signupform" class="" role="form" style="width: 90%; margin: 0 auto;padding-top:20px;">
-                    <div id="signupalert" style="display: none;" class="alert alert-danger">
+                <form id="signupform" method="post"
+                      role="form" style="width: 90%; margin: 0 auto;padding-top:20px;" th:action="@{/signup}">
+                    <div class="alert alert-danger" id="signupalert" style="display: none;">
                         <p>Error:</p> <span></span>
                     </div>
-                    <div style="margin-bottom: 25px;" class="input-group"><span class="input-group-addon"><i
+                    <div class="input-group" style="margin-bottom: 25px;"><span class="input-group-addon"><i
                             class="glyphicon glyphicon-user"></i></span>
                         <input
-                                id="login-username-firstname" type="text" class="form-control"
-                                name="login-username-firstname"
-                                value=""
-                                th:placeholder="#{fullname}"/>
+                                class="form-control" id="login-username-firstname" name="login-username-firstname"
+                                th:placeholder="#{fullname}"
+                                type="text"
+                                value=""/>
                     </div>
-                    <div style="margin-bottom: 25px;" class="input-group"><span class="input-group-addon"><i
+                    <div class="input-group" style="margin-bottom: 25px;"><span class="input-group-addon"><i
                             class="glyphicon glyphicon-user"></i></span>
                         <input
-                                id="login-username-signup" type="text" class="form-control" name="login-username-signup"
-                                value=""
-                                th:placeholder="#{username}"/>
+                                class="form-control" id="login-username-signup" name="login-username-signup"
+                                th:placeholder="#{username}"
+                                type="text"
+                                value=""/>
                     </div>
-                    <div style="margin-bottom: 25px;" class="input-group"><span class="input-group-addon"><i
+                    <div class="input-group" style="margin-bottom: 25px;"><span class="input-group-addon"><i
                             class="glyphicon glyphicon-lock"></i></span>
                         <input
-                                id="login-password-signup" type="password" class="form-control"
-                                name="login-password-signup"
-                                th:placeholder="#{password}"/>
+                                class="form-control" id="login-password-signup" name="login-password-signup"
+                                th:placeholder="#{password}"
+                                type="password"/>
                     </div>
                     <div class="form-group">
                         <!-- Button -->
                         <div class="col-md-12 controls">
-                            <button id="btn-signup" type="button" class="btn btn-info"><i class="icon-hand-right"></i>[[#{signup}]]
+                            <button class="btn btn-info" id="btn-signup" type="button"><i class="icon-hand-right"></i>[[#{signup}]]
                             </button>
                         </div>
                     </div>

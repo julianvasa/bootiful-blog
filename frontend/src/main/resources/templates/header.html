@@ -1,71 +1,85 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+      xmlns:th="http://www.thymeleaf.org">
+
 <head>
     ...
 </head>
 <body>
 
 <header>
-
+    
     <nav class="navbar fixed-top navbar-light bg-light">
-
+        
         <div class="top-menu" style="box-shadow: 0px 1px 1px rgba(0,0,0, .3);">
-
+            
             <ul class="left-area welcome-area">
                 <li class="hello-blog">[[#{header_txt}]]</li>
                 <li><a
-                        th:href="@{/}">Home</a>
+                        th:href="@{/}"><i class="ion-android-home"
+                                          style="font-size: 20px; vertical-align: middle;"></i></a>
                     <span th:if="${currentCat!=null}">&nbsp;&nbsp;<i
                             class="ion-chevron-right"></i>&nbsp;&nbsp;<a th:href="@{/1/cat/}+${currentCat.id}">[[${currentCat.name}]]</a></span>
                     <span th:if="${recipe!=null}">&nbsp;&nbsp;<i
                             class="ion-chevron-right"></i>&nbsp;&nbsp;[[${recipe.name}]]</span>
-                    <span th:if="${page.isPresent()} and ${page.get()}>1">&nbsp;&nbsp;<i
+                    <span th:if="${page}!=null and ${page.isPresent()} and ${page.get()}>1">&nbsp;&nbsp;<i
                             class="ion-chevron-right"></i>&nbsp;&nbsp;[[${page.get()}]]</span>
                     <span th:if="${searchFilter!=null}">&nbsp;&nbsp;<i
                             class="ion-chevron-right"></i>&nbsp;&nbsp;[[#{search_results}]]&nbsp;<span
                             style="color:#FFAD4D;">[[${searchFilter}]]</span></span>
-
+                
                 </li>
             </ul><!-- left-area -->
-
-
+            
+            
             <div class="right-area">
-
+                
                 <div class="src-area">
-                    <form name="form-search-top" id="form-search-top">
-                        <input class="src-input" type="text" th:placeholder="#{search}" id="top-search">
-                        <button class="src-btn" type="submit" onclick="submitSearchTop()">
+                    <form id="form-search-top" name="form-search-top">
+                        <input class="src-input" id="top-search" th:placeholder="#{search}" type="text">
+                        <button class="src-btn" onclick="submitSearchTop()" type="submit">
                             <i
                                     class="ion-ios-search-strong"></i></button>
                     </form>
                 </div><!-- src-area -->
-
+                
                 <ul class="social-icons">
-                    <li><a href="?lang=sq"><img src="/img/al_rounded.png" alt="Shqip"/></a></li>
-                    <li><a href="?lang=en"><img src="/img/en_rounded.png" alt="English"/></a></li>
+                    <li><a href="?lang=sq"><img alt="Shqip" src="/img/al_rounded.png" style="width:20px;"/></a></li>
+                    <li><a href="?lang=en"><img alt="English" src="/img/en_rounded.png" style="width:20px;"/></a></li>
+                    <li sec:authorize="isAuthenticated()">
+                        <a href="/profile"><i class="ion-android-person"
+                                              style="font-size: 20px; vertical-align: middle; color:#FFAD4D;"></i></a>
+                    </li>
+                    <li sec:authorize="!isAuthenticated()">
+                        <a href="/login"><i class="ion-android-person"
+                                            style="font-size: 20px; vertical-align: middle;"></i></a>
+                    </li>
+                    <li sec:authorize="isAuthenticated()">
+                        <a href="/logout"><img src="/img/logout_img.png" style="width:20px;"/></a>
+                    </li>
+                
                 </ul>
-
                 <!-- right-area -->
-
+            
             </div><!-- right-area -->
             <div class="right-area">
-                <span th:if="${link_more}!='#'" style="float:right;">
-                    <a th:href="${link_more}"
-                       style="margin-right:20px;">[[${#strings.capitalize('__#{older}__')}]]
-                        <span th:if="${currentCat!=null}">[[#{in_cat}]]&nbsp;[[${#strings.toLowerCase(currentCat.name)}]]</span>
+                <span style="float:right;" th:if="${link_more}!='#'">
+                    <a style="margin-right:20px;"
+                       th:href="${link_more}">[[${#strings.capitalize('__#{older}__')}]]
+                        <span th:if="${currentCat!=null}">[[#{in_cat}]]"[[${#strings.toLowerCase(currentCat.name)}]]"</span>
                     &nbsp;&nbsp;<i class="ion-chevron-right"></i></a>
                 </span>
             </div>
         </div><!-- top-menu -->
     </nav>
-
+    
     <div class="middle-menu center-text"><a href="/"><img
             src="/img/logo.png"></a></div>
-
+    
     <div class="bottom-area">
-
+        
         <div class="menu-nav-icon" data-nav-menu="#main-menu"><i class="ion-navicon"></i></div>
-
+        
         <ul class="main-menu visible-on-click" id="main-menu">
             <li><a href="/">HOME</a></li>
             <li class="drop-down"><a href="#">[[${#strings.toUpperCase('__#{categories}__')}]]<i
@@ -76,12 +90,12 @@
                             th:text="${cat.count}"></span><a th:href="@{/1/cat/}+${cat.id}"
                                                              th:text="${cat.name}"></a>
                     </li>
-
+                
                 </ul>
             </li>
-            <li><a href="/add">[[#{add}]]</a></li>
+            <li sec:authorize="isAuthenticated()"><a href="/add">[[#{add}]]</a></li>
             <li><a href="/about">[[#{about}]]</a></li>
         </ul><!-- main-menu -->
-
+    
     </div><!-- conatiner -->
 </header>

@@ -36,14 +36,10 @@ import java.util.List;
 })
 @XmlRootElement(name = "getCategoriesResponse")
 public class GetCategoriesResponse {
-
-    public void setCategories(List<Categories> categories) {
-        this.categories = categories;
-    }
-
+    
     @XmlElement(required = true)
     protected List<Categories> categories;
-
+    
     /**
      * Gets the value of the categories property.
      *
@@ -66,9 +62,13 @@ public class GetCategoriesResponse {
      */
     public List<Categories> getCategories() {
         if (categories == null) {
-            categories = new ArrayList<Categories>();
+            categories = new ArrayList<>();
         }
         return this.categories;
     }
-
+    
+    public void setCategories(List<Categories> categories) {
+        this.categories = categories;
+    }
+    
 }

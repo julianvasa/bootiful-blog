@@ -1,11 +1,13 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
+<html
+        xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <title>[[${page_title}]]</title>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
     <meta charset="UTF-8">
-
+    
     <link href="https://fonts.googleapis.com/css?family=Handlee" rel="stylesheet">
     <link href="/css/bootstrap.css" rel="stylesheet">
     <link href="/css/ionicons.css" rel="stylesheet">
@@ -16,24 +18,33 @@
 </head>
 <body>
 <div th:replace="header :: header">Header</div>
+<!--
+<div sec:authorize="isAuthenticated()">
+    Text visible only to authenticated users.
+</div>
+Authenticated username:
+<div sec:authentication="name"></div>
+Authenticated user roles:
+<div sec:authentication="principal.authorities"></div>
+-->
 
 <section class="section blog-area">
     <div class="container">
         <div class="row" style="background: white; padding: 20px;">
-
+            
             <div class="col-lg-8 col-md-12">
                 <div class="blog-posts">
-                    <p th:if="${currentCat!=null}" style="font-family: 'Handlee', cursive; font-size:40px;">
-                        <img style="width: 8%; float: left; margin-right:10px;"
-                             th:src="@{${'/img/categories/' + currentCat.image + '.png'}}"
-                             alt="${currentCat.name}">
+                    <p style="font-family: 'Handlee', cursive; font-size:40px;" th:if="${currentCat!=null}">
+                        <img alt="${currentCat.name}"
+                             style="width: 8%; float: left; margin-right:10px;"
+                             th:src="@{${'/img/categories/' + currentCat.image + '.png'}}">
                         [[${currentCat.name}]]</p>
-
-                    <p th:if="${searchFilter!=null}" style="font-family: 'Handlee', cursive; font-size:40px;">
+                    
+                    <p style="font-family: 'Handlee', cursive; font-size:40px;" th:if="${searchFilter!=null}">
                         [[#{search_results}]]
                         <span style="color:#FFAD4D;">[[${searchFilter}]]</span>
                     </p>
-
+                    
                     <div class="single-post" th:each="recipe,iter : ${recipes}" th:if="*{iter.index} < 4">
                         <div class=" image-wrapper
                     ">
@@ -47,11 +58,11 @@
                                 <span th:if="(${recipe.time}!=null and ${recipe.time.length()>2})"><strong>[[#{time}]]:&nbsp;</strong>[[${recipe.time}]]
                                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
                                 <span th:if="(${recipe.calories.length()>2} and ${recipe.calories}!=null)"><strong>[[#{difficulty}]]:&nbsp;</strong>[[${recipe.calories}]]</span>
-
+                            
                             </p>
                             <br th:if="(${recipe.servings}!=null and ${recipe.servings.length()>2}) or (${recipe.time}!=null and ${recipe.time.length()>2}) or (${recipe.calories}!=null and ${recipe.calories.length()>2})">
                             <a th:href="@{/recipe/}+${recipe.id}"><img th:src="${recipe.image}"/></a></div>
-
+                        
                         <div class="icons">
                             <div class="left-area">
                                 <a class="btn caegory-btn"
@@ -63,8 +74,8 @@
                                 <li><a href="#"><i class="ion-android-textsms"></i>06</a></li>
                             </ul>
                         </div>
-
-
+                        
+                        
                         <p th:if="${recipe.instruction.length()}<=300"
                            th:utext="${recipe.instruction}"></p>
                         <p th:if="${recipe.intro.length()}>10"
@@ -76,13 +87,13 @@
                             '+${recipe.posted.toString().substring(6,8)}+'/'+${recipe.posted.toString().substring(4,6)}+'/'+${recipe.posted.toString().substring(0,4)}]]</em>
                         </p>-->
                         <a class="btn read-more-btn" th:href="@{/recipe/}+${recipe.id}"><b>[[#{read}]]</b></a>
-
-
+                    
+                    
                     </div><!-- single-post -->
-
-
+                    
+                    
                     <div class="row">
-
+                        
                         <div class="col-lg-6 col-md-12" th:each="recipe,iter : ${recipes}" th:if="*{iter.index} >= 4">
                             <div class="single-post">
                                 <h3 class="title"><a th:href="@{/recipe/}+${recipe.id}" th:text="${recipe.name}"><b
@@ -94,12 +105,12 @@
                                     <span th:if="(${recipe.calories.length()>2} and ${recipe.calories}!=null)"><strong>[[#{difficulty}]]:&nbsp;</strong>[[${recipe.calories}]]</span>
                                 </p>
                                 <br th:if="(${recipe.servings}!=null and ${recipe.servings.length()>2}) or (${recipe.time}!=null and ${recipe.time.length()>2}) or (${recipe.calories}!=null and ${recipe.calories.length()>2})">
-
-
+                                
+                                
                                 <div class="image-wrapper"><a th:href="@{/recipe/}+${recipe.id}"><img
                                         th:src="${recipe.image}"/></a>
                                 </div>
-
+                                
                                 <div class="icons">
                                     <div class="left-area">
                                         <a class="btn caegory-btn"
@@ -111,35 +122,35 @@
                                             <li><a href="#"><i class="ion-android-textsms"></i>06</a></li>
                                         </ul>
                                     </div>
-
-
+                                
+                                
                                 </div>
                                 <!--<p class="date"><em>[[#{posted}+':
                                     '+${recipe.posted.toString().substring(6,8)}+'/'+${recipe.posted.toString().substring(4,6)}+'/'+${recipe.posted.toString().substring(0,4)}]]</em>
                                 </p>-->
-
+                                
                                 <p th:if="${recipe.instruction.length()}<=300"
                                    th:utext="${recipe.instruction}"></p>
                                 <p th:if="${recipe.intro.length()}>10"
                                    th:utext="${recipe.intro}"></p>
                                 <p th:if="${recipe.intro.length()}<=10"
                                    th:utext="${recipe.instruction.substring(0,300)}+' ...'"></p>
-
+                                
                                 <a class="btn read-more-btn" th:href="@{/recipe/}+${recipe.id}"><b>[[#{read}]]</b></a>
                             </div><!-- single-post -->
                         </div><!-- col-sm-6 -->
-
+                    
                     </div><!-- row -->
-
-                    <a th:if="${link_more}!='#'" class="btn load-more-btn" th:href="${link_more}">[[${#strings.toUpperCase('__#{older}__')}]]</a>
-
+                    
+                    <a class="btn load-more-btn" th:href="${link_more}" th:if="${link_more}!='#'">[[${#strings.toUpperCase('__#{older}__')}]]</a>
+                
                 </div><!-- blog-posts -->
             </div><!-- col-lg-4 -->
-
-
+            
+            
             <div th:replace="sidebar :: sidebar">Sidebar</div>
-
-
+        
+        
         </div><!-- row -->
     </div><!-- container -->
 </section><!-- section -->

@@ -22,11 +22,10 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.*;
 
-
 @Controller
 @RequestMapping("/")
 public class HomeController {
-
+    
     private static final Logger log = LoggerFactory.getLogger(HomeController.class);
     @Autowired
     private SoapClient categorySoapClient;
@@ -34,14 +33,14 @@ public class HomeController {
     private TagControllerRest tagControllerRest;
     @Autowired
     private MessageSource messageSource;
-
+    
     @RequestMapping(value = {"/", "/{page}", "/{page}/cat/{cat}", "/search/{keyword}"})
     public String getAllRecipes(Model model, @PathVariable(value = "page") Optional<Integer> p, @PathVariable Optional<Integer> cat,
-            @PathVariable(value = "keyword") Optional<String> searchFilter, Locale locale) {
-
+                                @PathVariable(value = "keyword") Optional<String> searchFilter, Locale locale) {
+        
         final String header_txt = messageSource.getMessage("header_txt", null, locale);
         final String search_results = messageSource.getMessage("search_results", null, locale);
-
+        
         List<Recipes> recipes = new ArrayList<>();
         List<String> tags = new ArrayList<>();
         List<Categories> categories = new ArrayList<>();
@@ -59,20 +58,20 @@ public class HomeController {
         String link_more = "/" + (page + 1);
         String tags_url = "http://localhost/api/tags";
         String recent_url = "http://localhost/api/recipes/1";
-
+        
         if (cat.isPresent()) {
             main_url = "http://localhost/api/recipes/" + page + "/cat/" + cat.get();
             next_url = "http://localhost/api/recipes/" + (page + 1) + "/cat/" + cat.get();
             link_more = "/" + (page + 1) + "/cat/" + cat.get();
             currentCat = soapResponse.getCategories().stream().filter(c -> c.getId() == cat.get()).findFirst().get();
         }
-
+        
         if (searchFilter.isPresent()) {
             main_url = "http://localhost/api/search/" + searchFilter.get();
             next_url = "";
             link_more = "#";
             currentCat = null;
-
+            
             response_list =
                     restTemplate.exchange(main_url,
                             HttpMethod.GET, null, new ParameterizedTypeReference<List<Recipes>>() {
@@ -83,23 +82,23 @@ public class HomeController {
                 r = setTagsIntro(r);
                 recipes.add(r);
             });
-
-        }
-        else {
+            
+        } else {
+            
             response =
                     restTemplate.exchange(main_url,
                             HttpMethod.GET, null, new ParameterizedTypeReference<PagedResources<Recipes>>() {
                             }
                     );
-            Collection<Recipes> recipes_arr = Objects.requireNonNull(response.getBody()).getContent();
+            Collection<Recipes> recipes_arr = response.getBody().getContent();
             recipes_arr.stream().limit(20).forEach(r -> {
                 r = setTagsIntro(r);
                 recipes.add(r);
             });
-
+            
         }
-
-
+        
+        
         ResponseEntity<PagedResources<Recipes>> recent_response =
                 restTemplate.exchange(recent_url,
                         HttpMethod.GET, null, new ParameterizedTypeReference<PagedResources<Recipes>>() {
@@ -107,7 +106,7 @@ public class HomeController {
                 );
         Collection<Recipes> recent_recipes_arr = Objects.requireNonNull(recent_response.getBody()).getContent();
         recent_recipes_arr.stream().limit(10).forEach(recent_recipes::add);
-
+        
         ResponseEntity<List<String>> tags_response =
                 restTemplate.exchange(tags_url,
                         HttpMethod.GET, null, new ParameterizedTypeReference<List<String>>() {
@@ -115,62 +114,56 @@ public class HomeController {
                 );
         Collection<String> tags_arr = Objects.requireNonNull(tags_response.getBody());
         tags_arr.stream().limit(20).forEach(tags::add);
-
+        
         if (!next_url.isEmpty()) {
             ResponseEntity<PagedResources<Recipes>> response_next =
                     restTemplate.exchange(next_url,
                             HttpMethod.GET, null, new ParameterizedTypeReference<PagedResources<Recipes>>() {
                             }
                     );
-
+            
             if (Objects.requireNonNull(response_next.getBody()).getContent().size() > 0) {
                 model.addAttribute("link_more", link_more);
-            }
-            else {
+            } else {
                 model.addAttribute("link_more", "#");
             }
-        }
-        else {
+        } else {
             model.addAttribute("link_more", "#");
         }
         if (currentCat != null) {
             model.addAttribute("currentCat", currentCat);
         }
-
-        if (searchFilter.isPresent()) {
-            model.addAttribute("searchFilter", searchFilter.get());
-        }
-
+        
+        searchFilter.ifPresent(s -> model.addAttribute("searchFilter", s));
+        
         model.addAttribute("recent", recent_recipes);
         model.addAttribute("tagCloud", tags);
         model.addAttribute("recipes", recipes);
         model.addAttribute("categories", categories);
         if (searchFilter.isPresent()) {
             model.addAttribute("page_title", search_results + " " + searchFilter.get());
-        }
-        else if (currentCat != null) {
+        } else if (currentCat != null) {
             model.addAttribute("page_title", currentCat.getName());
-        }
-        else {
+        } else {
             model.addAttribute("page_title", header_txt);
         }
         return "home";
     }
-
+    
     private Recipes setTagsIntro(Recipes p) {
         RestTemplate restTemplate = new RestTemplate();
         Recipes recipe = restTemplate.getForObject("http://localhost/api/recipe/" + p.getId(), Recipes.class, 200);
         List<Tags> tags = Objects.requireNonNull(recipe).getTags();
         tags.sort(Comparator.comparingInt(Tags::getStart_pos));
-
+        
         int start_pos = 0;
         int start_pos2 = 0;
         for (Tags tag : tags) {
             if (tag.getIntro_instruction().equals("intro")) {
-                StringBuffer ins = new StringBuffer(p.getIntro());
+                StringBuilder ins = new StringBuilder(p.getIntro());
                 if (!ins.substring(tag.getStart_pos() + start_pos, tag.getEnd_pos() + start_pos).contains("<a") &&
                         !ins.substring(tag.getStart_pos() + start_pos2, tag.getEnd_pos() + start_pos2).contains("<a")) {
-
+                    
                     p.setIntro(ins.replace(
                             (tag.getStart_pos() + start_pos),
                             (tag.getEnd_pos() + start_pos),

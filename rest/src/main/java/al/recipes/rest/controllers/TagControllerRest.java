@@ -12,10 +12,10 @@ import java.util.List;
 @RestController
 @RequestMapping("/api")
 public class TagControllerRest {
-
+    
     @Autowired
     TagsService tagsService;
-
+    
     @GetMapping("/tags")
     public List<Tags> getRandomTags() {
         return tagsService.findRandomTags();

@@ -31,27 +31,27 @@ public class RecipeController {
     private SoapClient categorySoapClient;
     @Autowired
     private TagControllerRest tagControllerRest;
-
+    
     @GetMapping("/recipe/{id}")
     public String index(Model model, @PathVariable long id) {
-        List<Recipes> recipes = new ArrayList<Recipes>();
+        List<Recipes> recipes = new ArrayList<>();
         List<Categories> categories = new ArrayList<>();
         List<String> tagCloud = new ArrayList<>();
         List<Recipes> recent_recipes = new ArrayList<>();
-
+        
         RestTemplate restTemplate = new RestTemplate();
         String main_url = "http://localhost/api/recipe/" + id;
         String tag_cloud_url = "http://localhost/api/tags";
         String recent_url = "http://localhost/api/recipes/1";
-
+        
         Recipes recipe = restTemplate.getForObject(main_url, Recipes.class, 200);
         List<Tags> tags = Objects.requireNonNull(recipe).getTags();
         tags.sort(Comparator.comparingInt(Tags::getStart_pos));
         GetCategoriesResponse soapResponse = categorySoapClient.getCategories();
         soapResponse.getCategories().forEach(categories::add);
-
+        
         Categories currentCat = soapResponse.getCategories().stream().filter(c -> c.getId() == recipe.getCategory().getId()).findFirst().get();
-
+        
         ResponseEntity<List<String>> tags_response =
                 restTemplate.exchange(tag_cloud_url,
                         HttpMethod.GET, null, new ParameterizedTypeReference<List<String>>() {
@@ -59,7 +59,7 @@ public class RecipeController {
                 );
         Collection<String> tags_arr = Objects.requireNonNull(tags_response.getBody());
         tags_arr.stream().limit(20).forEach(tagCloud::add);
-
+        
         ResponseEntity<PagedResources<Recipes>> recent_response =
                 restTemplate.exchange(recent_url,
                         HttpMethod.GET, null, new ParameterizedTypeReference<PagedResources<Recipes>>() {
@@ -67,15 +67,15 @@ public class RecipeController {
                 );
         Collection<Recipes> recent_recipes_arr = Objects.requireNonNull(recent_response.getBody()).getContent();
         recent_recipes_arr.stream().limit(10).forEach(recent_recipes::add);
-
+        
         int start_pos = 0;
         int start_pos2 = 0;
         for (Tags tag : tags) {
             if (tag.getIntro_instruction().equals("instruction")) {
-                StringBuffer ins = new StringBuffer(recipe.getInstruction());
+                StringBuilder ins = new StringBuilder(recipe.getInstruction());
                 if (!ins.substring(tag.getStart_pos() + start_pos, tag.getEnd_pos() + start_pos).contains("<a") &&
                         !ins.substring(tag.getStart_pos() + start_pos2, tag.getEnd_pos() + start_pos2).contains("<a")) {
-
+                    
                     recipe.setInstruction(ins.replace(
                             (tag.getStart_pos() + start_pos),
                             (tag.getEnd_pos() + start_pos),
@@ -86,15 +86,15 @@ public class RecipeController {
                 }
             }
         }
-
+        
         start_pos = 0;
         start_pos2 = 0;
         for (Tags tag : tags) {
             if (tag.getIntro_instruction().equals("intro")) {
-                StringBuffer ins = new StringBuffer(recipe.getIntro());
+                StringBuilder ins = new StringBuilder(recipe.getIntro());
                 if (!ins.substring(tag.getStart_pos() + start_pos, tag.getEnd_pos() + start_pos).contains("<a") &&
                         !ins.substring(tag.getStart_pos() + start_pos2, tag.getEnd_pos() + start_pos2).contains("<a")) {
-
+                    
                     recipe.setIntro(ins.replace(
                             (tag.getStart_pos() + start_pos),
                             (tag.getEnd_pos() + start_pos),
@@ -113,13 +113,13 @@ public class RecipeController {
         model.addAttribute("tags", tags);
         model.addAttribute("recipe", recipe);
         model.addAttribute("categories", categories);
-
+        
         return "view_recipe";
     }
-
+    
     @GetMapping("/add")
     public String index(Model model) {
-
+        
         return "create_recipe.html";
     }
 }
