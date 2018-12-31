@@ -14,7 +14,7 @@ Developed a simple blog using:
  - Internationalization (EN, AL)
  - Some experiments with Lambda functions
  - Pagination
-
+ - User Login / Registration 
 
 The blog has a homepage which displays recent (paginated) recipes.
 The recipes are grouped by categories

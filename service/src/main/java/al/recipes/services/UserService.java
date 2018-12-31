@@ -34,7 +34,7 @@ public class UserService {
         u.setPassword(bCryptPasswordEncoder.encode(password));
         u.setUsername(username);
         Roles r = new Roles();
-        r.setRole("ROLE_USER");
+        r.setRole("USER");
         u.setRole(r);
         userRepo.save(u);
     }
