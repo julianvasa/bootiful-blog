@@ -5,11 +5,9 @@ CREATE TABLE categories (
   count int(11)
 );
 
-
 CREATE TABLE hibernate_sequence (
   next_val bigint(20)
 );
-
 
 CREATE TABLE ingredients (
   id int(11) NOT NULL AUTO_INCREMENT,
@@ -26,13 +24,22 @@ CREATE TABLE roles (
   PRIMARY KEY (id)
 );
 
-
 CREATE TABLE users (
   id int(11) NOT NULL AUTO_INCREMENT,
   username varchar(255) NOT NULL,
   fullname varchar(255) NOT NULL,
   password varchar(60) NOT NULL,
   role int(11),
+  PRIMARY KEY (id)
+);
+
+CREATE TABLE tags (
+  recipe_id int(11),
+  value varchar(100),
+  start_pos int(11),
+  end_pos int(11),
+  intro_instruction varchar(30),
+  id int(11) unsigned NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (id)
 );
 
@@ -54,15 +61,4 @@ CREATE TABLE recipes (
   userid int(11),
   PRIMARY KEY (id)
   );
-
-CREATE TABLE tags (
-  recipe_id int(11),
-  value varchar(100),
-  start_pos int(11),
-  end_pos int(11),
-  intro_instruction varchar(30),
-  id int(11) unsigned NOT NULL AUTO_INCREMENT,
-  PRIMARY KEY (id)
-);
-
 
