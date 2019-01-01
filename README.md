@@ -16,7 +16,7 @@ Developed a simple blog using:
  - Pagination
  - User Login / Registration 
 
-The blog has a homepage which displays recent (paginated) recipes.
-The recipes are grouped by categories
+The blog has a homepage which displays recent (paginated) recipes.<br>
+The recipes are grouped by categories.
 There is a sidebar which shows some recent posts, the categories, a kind of tag cloud, a search.
 
