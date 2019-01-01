@@ -9,15 +9,7 @@ Developed a simple blog using:
  - Thymeleaf (hope to integrate also some other template engine)
  - Spring Data
  - Hibernate
- - MySQL DB (hop#MySQL
-                #spring.datasource.url=jdbc:mysql://localhost:3306/food-blog?characterEncoding=utf8&verifyServerCertificate=false&useSSL=false&requireSSL=false
-                #spring.datasource.username=root
-                #spring.datasource.password=root
-                #spring.datasource.testWhileIdle=true
-                #spring.datasource.validationQuery=SELECT 1
-                #spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQL5InnoDBDialect
-                #spring.jpa.properties.hibernate.id.new_generator_mappings=false
-                #spring.datasource.initialization-mode=alwayse to integrate also some NoSQL DB in the future)
+ - MySQL DB (hope to integrate also some NoSQL DB in the future)
  - Lombok (because i am lazy and dont like to write getters/setters/constructors etc)
  - Internationalization (EN, AL)
  - Some experiments with Lambda functions
