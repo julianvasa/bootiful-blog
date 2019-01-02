@@ -46,17 +46,10 @@ public class LoginController {
         return "login";
     }
     
-    /*@RequestMapping("/profile")
-    @PreAuthorize("hasAnyRole('ROLE_USER')")
-    public String profile(Model model) {
-        return "home";
-    }
-    */
     @RequestMapping("/logoutSuccessful")
     public String logout(Model model) {
         model.addAttribute("logout", true);
         return "login";
     }
-    
 }
 
