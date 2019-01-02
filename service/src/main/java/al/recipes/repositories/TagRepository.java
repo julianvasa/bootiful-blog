@@ -13,10 +13,10 @@ import java.util.List;
 public class TagRepository {
     @PersistenceContext
     private EntityManager entityManager;
-
+    
     @SuppressWarnings("unchecked")
     public List<Tags> getRandomTags() {
-        String hql = "SELECT value from Tags as r group by r.value having count(r.value)>30 order by RAND()";
+        String hql = "SELECT value from Tags as r group by r.value having count(r.value)>1 order by RAND()";
         return (List<Tags>) entityManager.createQuery(hql).getResultList();//.subList(0, 20);
     }
 }

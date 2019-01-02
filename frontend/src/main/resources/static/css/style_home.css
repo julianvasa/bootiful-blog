@@ -106,7 +106,7 @@ b.light-color{ color: #444; }
 .btn-2:hover{ background: #FFAD4D; color: #fff; }
 
 
-.section{ padding: 320px 0 40px; }
+.section{ padding: 120px 0 40px; }
 
 .section .heading{ padding-bottom: 70px; }
 
@@ -191,7 +191,7 @@ header .src-area .src-btn{ position: absolute; top: 0; bottom: 0; right: 0; widt
 
 /* MIDDLE AREA */
 
-header .middle-menu{ border-bottom: 1px solid #ddd;  }
+header .middle-menu{ border-bottom: 0px solid #ddd;  }
 
 header .logo{ padding: 30px 0; height: 160px; }
 

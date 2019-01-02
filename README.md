@@ -22,7 +22,7 @@ There is a sidebar which shows some recent posts, the categories, a kind of tag 
 
 Database setup:
 By default the app runs on H2 DB. If you want to switch to MySQL follow the steps below:
- - Uncomment the following variables in frontend/application.properties
+ - Uncomment the following variables in frontend/application.properties and change IP, PORT and DB_NAME
       - MySQL<br>
         _spring.datasource.url=jdbc:mysql://IP:PORT/DB_NAME?characterEncoding=utf8&verifyServerCertificate=false&useSSL=false&requireSSL=false
         spring.datasource.username=USERNAME

@@ -1,3 +1,11 @@
+DROP TABLE IF EXISTS categories;
+DROP TABLE IF EXISTS hibernate_sequence;
+DROP TABLE IF EXISTS ingredients;
+DROP TABLE IF EXISTS roles;
+DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS recipes;
+DROP TABLE IF EXISTS tags;
+
 CREATE TABLE categories (
   id int(11),
   name varchar(100),

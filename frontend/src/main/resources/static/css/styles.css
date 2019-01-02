@@ -98,7 +98,7 @@ b.light-color{ color: #444; }
 .btn-2:hover{ background: #FFAD4D; color: #fff; }
 
 
-.section{ padding: 350px 0 40px; }
+.section{ padding: 120px 0 40px; }
 
 .section .heading{ padding-bottom: 70px; }
 
@@ -184,7 +184,7 @@ header .src-area .src-btn{ position: absolute; top: 0; bottom: 0; right: 0; widt
 	
 /* MIDDLE AREA */
 
-header .middle-menu{ border-top: 0px solid #ddd; border-bottom: 1px solid #ddd; margin-top:50px;  }
+header .middle-menu{ border-top: 0px solid #ddd; border-bottom: 0px solid #ddd; margin-top:50px;  }
 
 header .logo{ padding: 30px 0; height: 200px; }
 
