@@ -4,10 +4,10 @@ import al.recipes.models.Recipes;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.PagingAndSortingRepository;
-import org.springframework.stereotype.Repository;
+import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 
-@Repository
+@RepositoryRestResource(path = "recipes", collectionResourceRel = "recipes")
 public interface RecipeRepository extends PagingAndSortingRepository<Recipes, Long> {
     Page<Recipes> findAll(Pageable pageable);
     

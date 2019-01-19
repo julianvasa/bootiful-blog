@@ -36,3 +36,4 @@ By default the app runs on H2 DB. If you want to switch to MySQL follow the step
         spring.datasource.initialization-mode=always
   - Uncomment the MySQL dependency in service/pom.xml and comment the H2 dependency 
  
+ I wasn't able to add swagger-data-rest (Spring Data Rest API Documentation) due to a conflict with spring-data-rest regarding the lib spring-data-commons :(
