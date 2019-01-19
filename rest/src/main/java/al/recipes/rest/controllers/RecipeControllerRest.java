@@ -1,17 +1,18 @@
 package al.recipes.rest.controllers;
 
+import al.recipes.models.Categories;
 import al.recipes.models.Recipes;
+import al.recipes.models.Users;
 import al.recipes.services.CategoriesService;
 import al.recipes.services.RecipesService;
 import al.recipes.services.SingleRecipeService;
+import al.recipes.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -28,6 +29,8 @@ public class RecipeControllerRest {
     SingleRecipeService singleRecipeService;
     @Autowired
     CategoriesService categoriesService;
+    @Autowired
+    UserService usersService;
     
     @GetMapping("/recipes/{page}")
     public Page<Recipes> getAllRecipes(@PathVariable(value = "page") Integer page) {
@@ -60,15 +63,57 @@ public class RecipeControllerRest {
     public List<Recipes> search(@PathVariable(value = "keyword") String keyword) {
         return recipesService.search(keyword);
     }
-
-/*
-    @PostMapping("/recipes")
-    public Recipes createRecipe(@Valid @RequestBody Recipes recipe) {
-        return recipesService.save(recipe);
+    
+    
+    @PostMapping("/newrecipe")
+    public Recipes newRecipe(@RequestParam(value = "id", required = true) long id,
+                             @RequestParam(value = "category_id", required = true) int category_id,
+                             @RequestParam(value = "name", required = true) String name,
+                             @RequestParam(value = "intro", required = false) String intro,
+                             @RequestParam(value = "instruction", required = true) String instruction,
+                             @RequestParam(value = "image", required = false) String image,
+                             @RequestParam(value = "link", required = false) String link,
+                             @RequestParam(value = "time", required = false) String time,
+                             @RequestParam(value = "servings", required = false) String servings,
+                             @RequestParam(value = "calories", required = false) String calories,
+                             @RequestParam(value = "favorite", required = false) int favorite,
+                             @RequestParam(value = "rating", required = false) int rating,
+                             @RequestParam(value = "posted", required = false) int posted,
+                             @RequestParam(value = "video", required = false) String video,
+                             @RequestParam(value = "username", required = true) String username
+    ) {
+        if (!SecurityContextHolder.getContext()
+                .getAuthentication()
+                .getPrincipal().equals("anonymousUser")) {
+            Users u = usersService.findByUsername(username);
+            if (u != null) {
+                Categories c = new Categories();
+                categoriesService.find(Long.valueOf(category_id));
+                Recipes recipe = new Recipes();
+                recipe.setId(id);
+                recipe.setCategory(c);
+                recipe.setName(name);
+                recipe.setIntro(intro);
+                recipe.setInstruction(instruction);
+                recipe.setCalories(calories);
+                recipe.setRating(rating);
+                recipe.setFavorite(favorite);
+                recipe.setUser(u);
+                recipe.setTime(time);
+                recipe.setPosted(posted);
+                recipe.setLink(link);
+                recipe.setServings(servings);
+                recipe.setVideo(video);
+                recipe.setImage(image);
+                return recipesService.save(recipe);
+            } else {
+                return null;
+            }
+        } else return null;
     }
 
 
-
+    /*
     @PutMapping("/recipes/{id}")
     public Recipes updateRecipe(@PathVariable(value = "id") Long recipeId, @Valid @RequestBody Recipes recipeDetails) {
 

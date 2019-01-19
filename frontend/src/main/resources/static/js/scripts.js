@@ -222,8 +222,9 @@ function submitSearchMain(){
         window.location.href = "/search/"+$('#main-search').val();
    }
 }
-
+if(document.querySelector("#form-search-main")){
 document.querySelector("#form-search-main").addEventListener("submit", function(e){
     e.preventDefault();    //stop form from submitting
     submitSearchTop();
 });
+}

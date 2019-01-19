@@ -9,12 +9,16 @@ import java.util.List;
 
 @Service
 public class CategoriesService {
-
+    
     @Autowired
     private CategoryRepository categoryRepository;
-
+    
     public List<Categories> findAll() {
         return this.categoryRepository.findAll();
     }
-
+    
+    public Categories find(Long id) {
+        return this.categoryRepository.getOne(id);
+    }
+    
 }

@@ -93,8 +93,8 @@
                 
                 </ul>
             </li>
-            <li sec:authorize="isAuthenticated()"><a href="/add">[[#{add}]]</a></li>
-            <li><a href="/about">[[#{about}]]</a></li>
+            <li sec:authorize="isAuthenticated()"><a href="/add">[[${#strings.toUpperCase('__#{add}__')}]]</a></li>
+            <li><a href="https://github.com/julianvasa/food-blog">[[#{about}]]</a></li>
         </ul><!-- main-menu -->
     
     </div><!-- conatiner -->

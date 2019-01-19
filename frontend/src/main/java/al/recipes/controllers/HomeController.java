@@ -16,6 +16,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.client.RestTemplate;
@@ -34,7 +35,7 @@ public class HomeController {
     @Autowired
     private MessageSource messageSource;
     
-    @RequestMapping(value = {"/", "/{page}", "/{page}/cat/{cat}", "/search/{keyword}"})
+    @GetMapping(value = {"/", "/{page:[0-9]+}", "/{page:[0-9]+}/cat/{cat}", "/search/{keyword}"})
     public String getAllRecipes(Model model, @PathVariable(value = "page") Optional<Integer> p, @PathVariable Optional<Integer> cat,
                                 @PathVariable(value = "keyword") Optional<String> searchFilter, Locale locale) {
         
@@ -49,7 +50,7 @@ public class HomeController {
         ResponseEntity<List<Recipes>> response_list = null;
         RestTemplate restTemplate = new RestTemplate();
         GetCategoriesResponse soapResponse = categorySoapClient.getCategories();
-        soapResponse.getCategories().forEach(categories::add);
+        categories.addAll(soapResponse.getCategories());
         Categories currentCat = null;
         Integer page = 1;
         if (p.isPresent()) page = p.get();
@@ -90,7 +91,7 @@ public class HomeController {
                             HttpMethod.GET, null, new ParameterizedTypeReference<PagedResources<Recipes>>() {
                             }
                     );
-            Collection<Recipes> recipes_arr = response.getBody().getContent();
+            Collection<Recipes> recipes_arr = Objects.requireNonNull(response.getBody()).getContent();
             recipes_arr.stream().limit(20).forEach(r -> {
                 r = setTagsIntro(r);
                 recipes.add(r);

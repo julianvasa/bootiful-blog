@@ -22,34 +22,5 @@ public class CategoryControllerRest {
     public List<Categories> getAllCategories() {
         return categoriesService.findAll();
     }
-
-
-
-/*
-    @PostMapping("/recipes")
-    public Recipes createRecipe(@Valid @RequestBody Recipes recipe) {
-        return recipesService.save(recipe);
-    }
-
-
-
-    @PutMapping("/recipes/{id}")
-    public Recipes updateRecipe(@PathVariable(value = "id") Long recipeId, @Valid @RequestBody Recipes recipeDetails) {
-
-        Recipes note = recipesService.findById(recipeId);
-
-        note.setName(recipeDetails.getName());
-        note.setInstruction(recipeDetails.getInstruction());
-
-        return recipesService.save(note);
-    }
-
-    @DeleteMapping("/recipes/{id}")
-    public ResponseEntity<?> deleteRecipe(@PathVariable(value = "id") Long recipeId) {
-        Recipes recipe = recipesService.findById(recipeId);
-
-        recipesService.delete(recipe);
-
-        return ResponseEntity.ok().build();
-    }*/
+    
 }

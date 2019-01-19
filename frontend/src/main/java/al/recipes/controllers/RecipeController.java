@@ -9,6 +9,7 @@ import categories.wsdl.GetCategoriesResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.hateoas.PagedResources;
 import org.springframework.http.HttpMethod;
@@ -31,6 +32,8 @@ public class RecipeController {
     private SoapClient categorySoapClient;
     @Autowired
     private TagControllerRest tagControllerRest;
+    @Autowired
+    private MessageSource messageSource;
     
     @GetMapping("/recipe/{id}")
     public String index(Model model, @PathVariable long id) {
@@ -48,7 +51,7 @@ public class RecipeController {
         List<Tags> tags = Objects.requireNonNull(recipe).getTags();
         tags.sort(Comparator.comparingInt(Tags::getStart_pos));
         GetCategoriesResponse soapResponse = categorySoapClient.getCategories();
-        soapResponse.getCategories().forEach(categories::add);
+        categories.addAll(soapResponse.getCategories());
         
         Categories currentCat = soapResponse.getCategories().stream().filter(c -> c.getId() == recipe.getCategory().getId()).findFirst().get();
         
@@ -117,9 +120,42 @@ public class RecipeController {
         return "view_recipe";
     }
     
-    @GetMapping("/add")
-    public String index(Model model) {
+    /*@PostMapping("/addrecipe")
+    public String newRecipe(Model model, @RequestParam(value = "id", required = true) long id,
+                            @RequestParam(value = "category_id", required = true) int category_id,
+                            @RequestParam(value = "name", required = true) String name,
+                            @RequestParam(value = "intro", required = false) String intro,
+                            @RequestParam(value = "instruction", required = true) String instruction,
+                            @RequestParam(value = "image", required = false) String image,
+                            @RequestParam(value = "link", required = false) String link,
+                            @RequestParam(value = "time", required = false) String time,
+                            @RequestParam(value = "servings", required = false) String servings,
+                            @RequestParam(value = "calories", required = false) String calories,
+                            @RequestParam(value = "favorite", required = false) int favorite,
+                            @RequestParam(value = "rating", required = false) int rating,
+                            @RequestParam(value = "posted", required = false) int posted,
+                            @RequestParam(value = "video", required = false) String video,
+                            @RequestParam(value = "username", required = true) String username) {
+        System.out.println(SecurityContextHolder.getContext()
+                .getAuthentication()
+                .getPrincipal());
         
-        return "create_recipe.html";
+        if (!SecurityContextHolder.getContext()
+                .getAuthentication()
+                .getPrincipal().equals("anonymousUser")) {
+            String url = "http://localhost/api/newrecipe?" + id;
+            ResponseEntity<Recipes> response = new RestTemplate().postForEntity(url, null, Recipes.class);
+            System.out.println(response.getBody().getId());
+            return "redirect:/recipe/" + response.getBody().getId();
+        } else {
+            return "login";
+        }
+    }*/
+    
+    @GetMapping("/add")
+    public String index(Model model, Locale locale) {
+        final String page_title = messageSource.getMessage("add", null, locale);
+        model.addAttribute("page_title", page_title);
+        return "edit_recipe";
     }
 }

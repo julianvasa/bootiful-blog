@@ -1,74 +1,278 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <title>Recipes Blog</title>
-    <meta http-equiv="Content-Type" instruction="text/html; charset=UTF-8"/>
-    <meta charset="utf-8">
-    <meta name="viewport" instruction="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" instruction="">
-    <meta name="author" instruction="">
+<html
+        xmlns:th="http://www.thymeleaf.org">
 
-    <link rel="stylesheet" type="text/css"
-          href="webjars/bootstrap/4.0.0/css/bootstrap.min.css"/>
-    <link href="/css/font-awesome.css" rel="stylesheet" type="text/css">
-    <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet'
-          type='text/css'>
-    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800'
-          rel='stylesheet' type='text/css'>
+<head>
+    <title>[[${page_title}]]</title>
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <meta charset="UTF-8">
+    
+    <link href="https://fonts.googleapis.com/css?family=Handlee" rel="stylesheet">
+    <link href="/css/bootstrap.css" rel="stylesheet">
+    <link href="/css/ionicons.css" rel="stylesheet">
+    <link href="/css/styles.css" rel="stylesheet">
+    <link href="/css/style_home.css" rel="stylesheet">
+    <link href="/css/responsive.css" rel="stylesheet">
+
 </head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav mr-auto">
-            <li class="nav-item active">
-                <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/recipes/create">Shto recete</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/recipes/create">Profili</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/logout">Dalje</a>
-            </li>
-        </ul>
-        <form class="form-inline my-2 my-lg-0">
-            <input class="form-control mr-sm-2" type="search" placeholder="Kerko" aria-label="Search">
-            <button class="btn btn-outline-light my-2 my-sm-0" type="submit">Kerko</button>
-        </form>
-    </div>
-</nav>
-<br>
-<div class="container-fluid">
-    <div class="card-deck">
-        <div th:each="recipe : ${recipes}" th:class="${recipe.cssClass}" style="min-width: 300px;">
-            <div class="card-header"><a th:href="@{/recipe(id=${recipe.id})}" th:text="${recipe.name}"></a>
-                <a th:href="@{/recipe/delete	(id=${recipe.id})}"><i class="fa fa-trash" aria-hidden="true"
-                                                                       style="float: right; padding-left: 10px; padding-right: 10px;"></i></a>
-                <a th:href="@{/recipe/edit(id=${recipe.id})}"><i class="fa fa-pencil" aria-hidden="true"
-                                                                 style="float: right; padding-left: 10px; padding-right: 10px;"></i></a>
-            </div>
-            <div th:class="${recipe.cssClassText}">
-                <!-- <h5 class="card-name"  th:text="${recipe.name}"></h5> -->
-                <p class="card-text" th:text="${recipe.instruction}"></p>
-                <a th:href="@{/recipe(id=${recipe.id})}">
-                    <button type="button" class="btn btn-primary btn-sm">Lexo receten</button>
-                </a>
-                <p class="card-text">
-                    <small class="text-muted">Last updated 3 mins ago</small>
-                </p>
-            </div>
-        </div>
-    </div>
+<div th:replace="header :: header">Header</div>
+<!--
+<div sec:authorize="isAuthenticated()">
+    Text visible only to authenticated users.
 </div>
+Authenticated username:
+<div sec:authentication="name"></div>
+Authenticated user roles:
+<div sec:authentication="principal.authorities"></div>
+-->
 
-<script type="text/javascript" src="webjars/jquery/2.2.1/jquery.min.js"></script>
-<script type="text/javascript" src="webjars/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<section class="section blog-area">
+    <div class="container">
+        <div class="row" style="background: white; padding: 20px;">
+            
+            <div class="col">
+                <div class="card my-4">
+                    <div class="card-body">
+                        
+                        <div class="row" style="padding:10px;">
+                            <div class="col-3" style="text-align: LEFT;">
+                                <label for="ID" style="margin-bottom:0px;">ID</label>
+                            </div>
+                            <div class="col-8" style="text-align: LEFT;">
+                                <select (change)="search($event.target.value)">
+                                    <option selected="selected">--SELECT RECIPE--</option>
+                                    <option *ngFor="let post of ngArray" value={{post.id}}>
+                                        {{post.name}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row" style="padding:10px;">
+                            <div class="col-3" style="text-align: LEFT;">
+                                <label for="CATEGORY_ID" style="margin-bottom:0px;">CATEGORY_ID</label>
+                            </div>
+                            <div class="col-8" style="text-align: LEFT;">
+                                <select [(ngModel)]="addRecipe.category_id">
+                                    <option value="0">--SELECT CATEGORY--</option>
+                                    <option *ngFor="let post of catArray" type="number" value={{post.id}}>
+                                        {{post.name}}
+                                    </option>
+                                </select></div>
+                        </div>
+                        <div class="row" style="padding:10px;">
+                            <div class="col-3" style="text-align: LEFT;">
+                                <label for="NAME" style="margin-bottom:0px;">NAME</label>
+                            </div>
+                            <div class="col-8" style="text-align: LEFT;">
+                                <input [(ngModel)]="addRecipe.name" class="form-control" id="NAME" type="text">
+                            </div>
+                        </div>
+                        <div class="row" style="padding:10px;">
+                            <div class="col-3" style="text-align: LEFT;">
+                                <label for="INTRO" style="margin-bottom:0px;">INTRO</label>
+                            </div>
+                            <div class="col-8" style="text-align: LEFT;">
+                                <textarea [(ngModel)]="addRecipe.intro" class="form-control" cols="50" id="INTRO"
+                                          rows="4"></textarea>
+                            </div>
+                        </div>
+                        <div class="row" style="padding:10px;">
+                            <div class="col-3" style="text-align: LEFT;">
+                                <label for="INSTRUCTION" style="margin-bottom:0px;">INSTRUCTION</label>
+                            </div>
+                            <div class="col-8" style="text-align: LEFT;">
+                                <textarea [(ngModel)]="addRecipe.instruction" class="form-control" cols="50"
+                                          id="INSTRUCTION" rows="4"></textarea>
+                            </div>
+                        </div>
+                        <div class="row" style="padding:10px;">
+                            <div class="col-3" style="text-align: LEFT;">
+                                <label for="IMAGE" style="margin-bottom:0px;">IMAGE</label>
+                            </div>
+                            <div class="col-8" style="text-align: LEFT;">
+                                <input [(ngModel)]="addRecipe.image" class="form-control" id="IMAGE" type="text">
+                            </div>
+                        </div>
+                        <div class="row" style="padding:10px;">
+                            <div class="col-3" style="text-align: LEFT;">
+                                <label for="LINK" style="margin-bottom:0px;">LINK</label>
+                            </div>
+                            <div class="col-8" style="text-align: LEFT;">
+                                <input [(ngModel)]="addRecipe.link" class="form-control" id="LINK" type="text">
+                            </div>
+                        </div>
+                        <div class="row" style="padding:10px;">
+                            <div class="col-3" style="text-align: LEFT;">
+                                <label for="TIME" style="margin-bottom:0px;">TIME</label>
+                            </div>
+                            <div class="col-8" style="text-align: LEFT;">
+                                <input [(ngModel)]="addRecipe.time" class="form-control" id="TIME" type="text">
+                            </div>
+                        </div>
+                        <div class="row" style="padding:10px;">
+                            <div class="col-3" style="text-align: LEFT;">
+                                <label for="SERVINGS" style="margin-bottom:0px;">SERVINGS</label>
+                            </div>
+                            <div class="col-8" style="text-align: LEFT;">
+                                <input [(ngModel)]="addRecipe.servings" class="form-control" id="SERVINGS" type="text">
+                            </div>
+                        </div>
+                        <div class="row" style="padding:10px;">
+                            <div class="col-3" style="text-align: LEFT;">
+                                <label for="ID" style="margin-bottom:0px;">DIFFICULTY</label>
+                            </div>
+                            <div class="col-8" style="text-align: LEFT;">
+                                <input [(ngModel)]="addRecipe.calories" class="form-control" id="CALORIES" type="text">
+                            </div>
+                        </div>
+                        <div class="row" style="padding:10px;">
+                            <div class="col-3" style="text-align: LEFT;">
+                                <label for="POSTED" style="margin-bottom:0px;">POSTED</label>
+                            </div>
+                            <div class="col-8" style="text-align: LEFT;">
+                                <input [(ngModel)]="addRecipe.posted" class="form-control" id="POSTED" type="number">
+                            </div>
+                        </div>
+                        <div class="row" style="padding:10px;">
+                            <div class="col-3" style="text-align: LEFT;">
+                                <label for="FAVORITE" style="margin-bottom:0px;">FAVORITE</label>
+                            </div>
+                            <div class="col-8" style="text-align: LEFT;">
+                                <input [(ngModel)]="addRecipe.favorite" class="form-control" id="FAVORITE"
+                                       type="number">
+                            </div>
+                        </div>
+                        <div class="row" style="padding:10px;">
+                            <div class="col-3" style="text-align: LEFT;">
+                                <label for="RATING" style="margin-bottom:0px;">RATING</label>
+                            </div>
+                            <div class="col-8" style="text-align: LEFT;">
+                                <input [(ngModel)]="addRecipe.rating" class="form-control" id="RATING" type="number">
+                            </div>
+                        </div>
+                        <div class="row" style="padding:10px;">
+                            <div class="col-3" style="text-align: LEFT;">
+                                <label for="VIDEO" style="margin-bottom:0px;">YOUTUBE</label>
+                            </div>
+                            <div class="col-8" style="text-align: LEFT;">
+                                <input [(ngModel)]="addRecipe.video" class="form-control" id="VIDEO" type="text">
+                            </div>
+                        </div>
+                        <div class="row" style="padding:10px;">
+                            <div class="col-6" style="text-align: LEFT;">
+                                <label for="INGRENDIENT" style="margin-bottom:0px;">INGREDIENT</label>
+                                <input [(ngModel)]="ingredient1" class="form-control" id="INGREDIENT" type="text">
+                            </div>
+                            <div class="col-6" style="text-align: LEFT;">
+                                <label for="INGRENDIENT" style="margin-bottom:0px;">INGREDIENT</label>
+                                <input [(ngModel)]="ingredient2" class="form-control" id="INGREDIENT" type="text">
+                            </div>
+                        </div>
+                        <div class="row" style="padding:10px;">
+                            <div class="col-6" style="text-align: LEFT;">
+                                <label for="INGRENDIENT" style="margin-bottom:0px;">INGREDIENT</label>
+                                <input [(ngModel)]="ingredient3" class="form-control" id="INGREDIENT" type="text">
+                            </div>
+                            <div class="col-6" style="text-align: LEFT;">
+                                <label for="INGRENDIENT" style="margin-bottom:0px;">INGREDIENT</label>
+                                <input [(ngModel)]="ingredient4" class="form-control" id="INGREDIENT" type="text">
+                            </div>
+                        </div>
+                        <div class="row" style="padding:10px;">
+                            <div class="col-6" style="text-align: LEFT;">
+                                <label for="INGRENDIENT" style="margin-bottom:0px;">INGREDIENT</label>
+                                <input [(ngModel)]="ingredient5" class="form-control" id="INGREDIENT" type="text">
+                            </div>
+                            <div class="col-6" style="text-align: LEFT;">
+                                <label for="INGRENDIENT" style="margin-bottom:0px;">INGREDIENT</label>
+                                <input [(ngModel)]="ingredient6" class="form-control" id="INGREDIENT" type="text">
+                            </div>
+                        </div>
+                        <div class="row" style="padding:10px;">
+                            <div class="col-6" style="text-align: LEFT;">
+                                <label for="INGRENDIENT" style="margin-bottom:0px;">INGREDIENT</label>
+                                <input [(ngModel)]="ingredient7" class="form-control" id="INGREDIENT" type="text">
+                            </div>
+                            <div class="col-6" style="text-align: LEFT;">
+                                <label for="INGRENDIENT" style="margin-bottom:0px;">INGREDIENT</label>
+                                <input [(ngModel)]="ingredient8" class="form-control" id="INGREDIENT" type="text">
+                            </div>
+                        </div>
+                        <div class="row" style="padding:10px;">
+                            <div class="col-6" style="text-align: LEFT;">
+                                <label for="INGRENDIENT" style="margin-bottom:0px;">INGREDIENT</label>
+                                <input [(ngModel)]="ingredient9" class="form-control" id="INGREDIENT" type="text">
+                            </div>
+                            <div class="col-6" style="text-align: LEFT;">
+                                <label for="INGRENDIENT" style="margin-bottom:0px;">INGREDIENT</label>
+                                <input [(ngModel)]="ingredient10" class="form-control" id="INGREDIENT" type="text">
+                            </div>
+                        </div>
+                        
+                        <div class="row" style="padding:10px;">
+                            <div class="col-6" style="text-align: LEFT;">
+                                <label for="INGRENDIENT" style="margin-bottom:0px;">INGREDIENT</label>
+                                <input [(ngModel)]="ingredient11" class="form-control" id="INGREDIENT" type="text">
+                            </div>
+                            <div class="col-6" style="text-align: LEFT;">
+                                <label for="INGRENDIENT" style="margin-bottom:0px;">INGREDIENT</label>
+                                <input [(ngModel)]="ingredient12" class="form-control" id="INGREDIENT" type="text">
+                            </div>
+                        </div>
+                        <div class="row" style="padding:10px;">
+                            <div class="col-6" style="text-align: LEFT;">
+                                <label for="INGRENDIENT" style="margin-bottom:0px;">INGREDIENT</label>
+                                <input [(ngModel)]="ingredient13" class="form-control" id="INGREDIENT" type="text">
+                            </div>
+                            <div class="col-6" style="text-align: LEFT;">
+                                <label for="INGRENDIENT" style="margin-bottom:0px;">INGREDIENT</label>
+                                <input [(ngModel)]="ingredient14" class="form-control" id="INGREDIENT" type="text">
+                            </div>
+                        </div>
+                        <div class="row" style="padding:10px;">
+                            <div class="col-6" style="text-align: LEFT;">
+                                <label for="INGRENDIENT" style="margin-bottom:0px;">INGREDIENT</label>
+                                <input [(ngModel)]="ingredient15" class="form-control" id="INGREDIENT" type="text">
+                            </div>
+                            <div class="col-6" style="text-align: LEFT;">
+                                <label for="INGRENDIENT" style="margin-bottom:0px;">INGREDIENT</label>
+                                <input [(ngModel)]="ingredient16" class="form-control" id="INGREDIENT" type="text">
+                            </div>
+                        </div>
+                        <div class="row" style="padding:10px;">
+                            <div class="col-6" style="text-align: LEFT;">
+                                <label for="INGRENDIENT" style="margin-bottom:0px;">INGREDIENT</label>
+                                <input [(ngModel)]="ingredient17" class="form-control" id="INGREDIENT" type="text">
+                            </div>
+                            <div class="col-6" style="text-align: LEFT;">
+                                <label for="INGRENDIENT" style="margin-bottom:0px;">INGREDIENT</label>
+                                <input [(ngModel)]="ingredient18" class="form-control" id="INGREDIENT" type="text">
+                            </div>
+                        </div>
+                        <div class="row" style="padding:10px;">
+                            <div class="col-6" style="text-align: LEFT;">
+                                <label for="INGRENDIENT" style="margin-bottom:0px;">INGREDIENT</label>
+                                <input [(ngModel)]="ingredient19" class="form-control" id="INGREDIENT" type="text">
+                            </div>
+                            <div class="col-6" style="text-align: LEFT;">
+                                <label for="INGRENDIENT" style="margin-bottom:0px;">INGREDIENT</label>
+                                <input [(ngModel)]="ingredient20" class="form-control" id="INGREDIENT" type="text">
+                            </div>
+                        </div>
+                        
+                        <div class="row" style="padding:10px;">
+                            <button (click)="insert()" class="btn btn-success">Insert</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div><!-- row -->
+    </div><!-- container -->
+</section><!-- section -->
+
+<div th:replace="footer :: footer">Footer</div>
+
 </body>
 </html>

@@ -1,6 +1,7 @@
-package al.recipes.security;
+package al.recipes.configuration;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -15,15 +16,17 @@ import javax.annotation.Resource;
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-    @Autowired
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
-    
     @Resource(name = "userDetailService")
     private UserDetailsService userDetailsService;
     
+    @Bean
+    public BCryptPasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+    
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder);
+        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
     }
     
     @Override
@@ -32,7 +35,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         //requireCsrfProtectionMatcher(new AntPathRequestMatcher("**/login")).
         http.authorizeRequests().antMatchers("/", "/login", "/logout").permitAll()
                 .antMatchers("/profile").access("hasAnyRole('ROLE_USER')")
-                //.antMatchers("/api/recipes/**").authenticated()
+                .antMatchers("/add").authenticated()
                 //.antMatchers("/api/tags/**").authenticated()
                 //.antMatchers("/api/categories/**").authenticated()
                 .and().formLogin()

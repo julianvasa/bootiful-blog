@@ -9,7 +9,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -24,9 +24,9 @@ public class UserDetailService implements UserDetailsService {
     
     private List<SimpleGrantedAuthority> getAuthority(Users user) {
         if (user.getRole().getRole().equals("ADMIN")) {
-            return Arrays.asList(new SimpleGrantedAuthority("ROLE_ADMIN"));
+            return Collections.singletonList(new SimpleGrantedAuthority("ROLE_ADMIN"));
         }
-        return Arrays.asList(new SimpleGrantedAuthority("ROLE_USER"));
+        return Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"));
     }
     
 }
