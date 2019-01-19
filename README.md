@@ -15,6 +15,7 @@ Developed a simple blog using:
  - Some experiments with Lambda functions
  - Pagination
  - User Login / Registration 
+ - Swagger for API Documentation 
 
 The blog has a homepage which displays recent (paginated) recipes.<br>
 The recipes are grouped by categories.
