@@ -8,6 +8,7 @@ Developed a simple blog using:
  - SOAP API
  - Thymeleaf (hope to integrate also some other template engine)
  - Spring Data
+ - Spring Data Rest
  - Hibernate
  - MySQL DB (hope to integrate also some NoSQL DB in the future)
  - Lombok (because i am lazy and dont like to write getters/setters/constructors etc)
