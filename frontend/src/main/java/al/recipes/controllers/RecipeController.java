@@ -6,6 +6,7 @@ import al.recipes.rest.controllers.TagControllerRest;
 import al.recipes.soap.SoapClient;
 import categories.wsdl.Categories;
 import categories.wsdl.GetCategoriesResponse;
+import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +37,7 @@ public class RecipeController {
     private MessageSource messageSource;
     
     @GetMapping("/recipe/{id}")
+    @ApiOperation(value = "Get recipe by id and display the view_recipe template")
     public String index(Model model, @PathVariable long id) {
         List<Recipes> recipes = new ArrayList<>();
         List<Categories> categories = new ArrayList<>();
@@ -153,6 +155,7 @@ public class RecipeController {
     }*/
     
     @GetMapping("/add")
+    @ApiOperation(value = "Get template to add a new recipe")
     public String index(Model model, Locale locale) {
         final String page_title = messageSource.getMessage("add", null, locale);
         model.addAttribute("page_title", page_title);

@@ -1,5 +1,6 @@
 package al.recipes.models;
 
+import io.swagger.annotations.ApiModel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -14,6 +15,8 @@ import java.io.Serializable;
 @Setter
 @NoArgsConstructor
 @ToString
+@ApiModel(description = "Roles Data Model")
+
 public class Roles implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id

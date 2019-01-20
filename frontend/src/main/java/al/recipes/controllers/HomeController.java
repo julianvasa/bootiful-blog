@@ -6,6 +6,7 @@ import al.recipes.rest.controllers.TagControllerRest;
 import al.recipes.soap.SoapClient;
 import categories.wsdl.Categories;
 import categories.wsdl.GetCategoriesResponse;
+import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +37,7 @@ public class HomeController {
     private MessageSource messageSource;
     
     @GetMapping(value = {"/", "/{page:[0-9]+}", "/{page:[0-9]+}/cat/{cat}", "/search/{keyword}"})
+    @ApiOperation(value = "Get recipes by page / by page and by cat / search", notes = "Get recipes by page / by page and by cat / search")
     public String getAllRecipes(Model model, @PathVariable(value = "page") Optional<Integer> p, @PathVariable Optional<Integer> cat,
                                 @PathVariable(value = "keyword") Optional<String> searchFilter, Locale locale) {
         

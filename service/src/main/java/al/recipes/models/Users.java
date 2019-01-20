@@ -1,5 +1,6 @@
 package al.recipes.models;
 
+import io.swagger.annotations.ApiModel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -19,6 +20,8 @@ import java.util.Collection;
 @Setter
 @NoArgsConstructor
 @ToString
+@ApiModel(description = "Users Data Model")
+
 public class Users implements UserDetails, Serializable {
     private static final long serialVersionUID = 1L;
     @Id

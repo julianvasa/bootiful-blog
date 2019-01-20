@@ -2,6 +2,7 @@ package al.recipes.rest.controllers;
 
 import al.recipes.models.Categories;
 import al.recipes.services.CategoriesService;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,6 +20,7 @@ public class CategoryControllerRest {
     CategoriesService categoriesService;
     
     @GetMapping("/categories")
+    @ApiOperation(value = "Get all categories", notes = "Retrieve all categories")
     public List<Categories> getAllCategories() {
         return categoriesService.findAll();
     }

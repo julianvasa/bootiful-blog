@@ -7,6 +7,7 @@ import al.recipes.services.CategoriesService;
 import al.recipes.services.RecipesService;
 import al.recipes.services.SingleRecipeService;
 import al.recipes.services.UserService;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -33,6 +34,7 @@ public class RecipeControllerRest {
     UserService usersService;
     
     @GetMapping("/recipes/{page}")
+    @ApiOperation(value = "Get recipes by page", notes = "Get recipes by page")
     public Page<Recipes> getAllRecipes(@PathVariable(value = "page") Integer page) {
         /*if (!SecurityContextHolder.getContext()
                 .getAuthentication()
@@ -47,11 +49,13 @@ public class RecipeControllerRest {
     }
     
     @GetMapping("/recipe/{id}")
+    @ApiOperation(value = "Get recipe by id", notes = "Get recipe by id")
     public Optional<Recipes> getRecipeById(@PathVariable(value = "id") long recipeId) {
         return singleRecipeService.findById(recipeId);
     }
     
     @GetMapping("/recipes/{page}/cat/{cat}")
+    @ApiOperation(value = "Get recipes by category", notes = "Get recipes by category")
     public Page<Recipes> getAllRecipesByCat(@PathVariable(value = "page") Integer page, @PathVariable(value = "cat") Integer cat) {
         int evalPage = (page < 1) ? INITIAL_PAGE : page - 1;
         Sort sort = new Sort(new Sort.Order(Sort.Direction.DESC, "id"));
@@ -60,12 +64,14 @@ public class RecipeControllerRest {
     }
     
     @GetMapping("/search/{keyword}")
+    @ApiOperation(value = "Search for recipes", notes = "Search for recipes")
     public List<Recipes> search(@PathVariable(value = "keyword") String keyword) {
         return recipesService.search(keyword);
     }
     
     
     @PostMapping("/newrecipe")
+    @ApiOperation(value = "Add new recipe", notes = "Add new recipe")
     public Recipes newRecipe(@RequestParam(value = "id", required = true) long id,
                              @RequestParam(value = "category_id", required = true) int category_id,
                              @RequestParam(value = "name", required = true) String name,

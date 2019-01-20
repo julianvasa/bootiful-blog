@@ -8,7 +8,7 @@ Developed a simple blog using:
  - SOAP API
  - Thymeleaf (hope to integrate also some other template engine)
  - Spring Data
- - Spring Data Rest
+ - Spring Data Rest 
  - Hibernate
  - MySQL DB (hope to integrate also some NoSQL DB in the future)
  - Lombok (because i am lazy and dont like to write getters/setters/constructors etc)
@@ -21,6 +21,8 @@ Developed a simple blog using:
 The blog has a homepage which displays recent (paginated) recipes.<br>
 The recipes are grouped by categories.
 There is a sidebar which shows some recent posts, the categories, a kind of tag cloud, a search.
+
+---
 
 Database setup:
 By default the app runs on H2 DB. If you want to switch to MySQL follow the steps below:
@@ -36,5 +38,10 @@ By default the app runs on H2 DB. If you want to switch to MySQL follow the step
         spring.jpa.properties.hibernate.id.new_generator_mappings=false
         spring.datasource.initialization-mode=always
   - Uncomment the MySQL dependency in service/pom.xml and comment the H2 dependency 
- 
+
+ ***
+
  I wasn't able to add swagger-data-rest (Spring Data Rest API Documentation) due to a conflict with spring-data-rest regarding the lib spring-data-commons :(
+ 
+ [REST API Documentation](http://localhost/swagger-ui.html)<br>
+ [SOAP WSDL](http://localhost/ws/categories.wsdl)

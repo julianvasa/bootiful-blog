@@ -12,15 +12,6 @@ public interface RecipeRepository extends PagingAndSortingRepository<Recipes, Lo
     Page<Recipes> findAll(Pageable pageable);
     
     Page<Recipes> findAllBycategory_id(int categoryValue, Pageable pageable);
-
-    /*
-    public interface RecipeRepository extends JpaRepository<Recipes, Long> {
-    List<Recipes> findAll();
-
-    List<Recipes> findFirst10ByOrderByIdDesc();
-
-    List<Recipes> findFirst2ByOrderByIdDesc();
-    */
     
     @SuppressWarnings("unchecked")
     Recipes save(Recipes note);
