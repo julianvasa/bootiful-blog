@@ -23,7 +23,7 @@
     "react": "^16.5.2",
     "react-dom": "^16.5.2",
     "webpack": "^1.11.0",
-    "eslint": "^1.6.0",
-    "eslint-loader": "^1.0.0"
+    "eslint": "^5.12.1",
+    "eslint-loader": "^2.1.1"
   }
 }
