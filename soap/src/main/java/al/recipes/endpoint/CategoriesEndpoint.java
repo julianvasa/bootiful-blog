@@ -10,7 +10,6 @@ import org.springframework.ws.server.endpoint.annotation.PayloadRoot;
 import org.springframework.ws.server.endpoint.annotation.RequestPayload;
 import org.springframework.ws.server.endpoint.annotation.ResponsePayload;
 
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
@@ -19,14 +18,15 @@ public class CategoriesEndpoint {
     private static final String NAMESPACE_URI = "categories.recipes.al";
     @Autowired
     private CategoriesService categoriesService;
-
+    
     @PayloadRoot(namespace = NAMESPACE_URI, localPart = "getCategoriesRequest")
     @ResponsePayload
     public GetCategoriesResponse GetCategoriesResponse(@RequestPayload GetCategoriesRequest request) {
         GetCategoriesResponse response = new GetCategoriesResponse();
+        List<al.recipes.categories.Categories> uuu = response.getCategories();
         List<Categories> uu = categoriesService.findAll();
-        List<al.recipes.categories.Categories> uuu = new ArrayList<>();
-
+        //List<al.recipes.categories.Categories> uuu = new ArrayList<>();
+        
         uu.sort(Comparator.comparingInt(Categories::getCount).reversed());
         uu.forEach(p ->
                 {
@@ -36,10 +36,11 @@ public class CategoriesEndpoint {
                     ppp.setImage(p.getImage());
                     ppp.setName(p.getName());
                     uuu.add(ppp);
+                    
                 }
         );
-        response.setCategories(uuu);
-
+        //response.setCategories(uuu);
+        
         return response;
     }
 }
