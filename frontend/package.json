@@ -10,20 +10,20 @@
     "type": "git",
     "url": "https://github.com/winterbe/spring-kotlin-react-demo"
   },
-  "scripts": {
-    "build": "mvn -q clean compile && npm install && webpack",
-    "serve": "mvn -q clean spring-boot:run",
-    "all": "npm install && webpack && mvn -q clean spring-boot:run",
-    "watch": "webpack --watch -d"
-  },
   "dependencies": {
-    "rest": "^1.3.1",
-    "babel-core": "^6.26.3",
-    "babel-loader": "^8.0.5",
     "react": "^16.5.2",
     "react-dom": "^16.5.2",
-    "webpack": "^1.11.0",
-    "eslint": "^5.12.1",
-    "eslint-loader": "^2.1.1"
+    "rest": "^1.3.1"
+  },
+  "scripts": {
+    "watch": "webpack --watch -d"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.1.0",
+    "@babel/preset-env": "^7.1.0",
+    "@babel/preset-react": "^7.0.0",
+    "babel-loader": "^8.0.2",
+    "webpack": "^4.19.1",
+    "webpack-cli": "^3.1.0"
   }
 }
