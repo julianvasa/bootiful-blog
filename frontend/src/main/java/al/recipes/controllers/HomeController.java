@@ -56,21 +56,21 @@ public class HomeController {
         Categories currentCat = null;
         Integer page = 1;
         if (p.isPresent()) page = p.get();
-        String main_url = "https://bootiful-blog.herokuapp.com/api/recipes/" + page;
-        String next_url = "https://bootiful-blog.herokuapp.com/api/recipes/" + (page + 1);
+        String main_url = "http://localhost/api/recipes/" + page;
+        String next_url = "http://localhost/api/recipes/" + (page + 1);
         String link_more = "/" + (page + 1);
-        String tags_url = "https://bootiful-blog.herokuapp.com/api/tags";
-        String recent_url = "https://bootiful-blog.herokuapp.com/api/recipes/1";
+        String tags_url = "http://localhost/api/tags";
+        String recent_url = "http://localhost/api/recipes/1";
         
         if (cat.isPresent()) {
-            main_url = "https://bootiful-blog.herokuapp.com/api/recipes/" + page + "/cat/" + cat.get();
-            next_url = "https://bootiful-blog.herokuapp.com/api/recipes/" + (page + 1) + "/cat/" + cat.get();
+            main_url = "http://localhost/api/recipes/" + page + "/cat/" + cat.get();
+            next_url = "http://localhost/api/recipes/" + (page + 1) + "/cat/" + cat.get();
             link_more = "/" + (page + 1) + "/cat/" + cat.get();
             currentCat = soapResponse.getCategories().stream().filter(c -> c.getId() == cat.get()).findFirst().get();
         }
         
         if (searchFilter.isPresent()) {
-            main_url = "https://bootiful-blog.herokuapp.com/api/search/" + searchFilter.get();
+            main_url = "http://localhost/api/search/" + searchFilter.get();
             next_url = "";
             link_more = "#";
             currentCat = null;
@@ -155,7 +155,7 @@ public class HomeController {
     
     private Recipes setTagsIntro(Recipes p) {
         RestTemplate restTemplate = new RestTemplate();
-        Recipes recipe = restTemplate.getForObject("https://bootiful-blog.herokuapp.com/api/recipe/" + p.getId(), Recipes.class, 200);
+        Recipes recipe = restTemplate.getForObject("http://localhost/api/recipe/" + p.getId(), Recipes.class, 200);
         List<Tags> tags = Objects.requireNonNull(recipe).getTags();
         tags.sort(Comparator.comparingInt(Tags::getStart_pos));
         
