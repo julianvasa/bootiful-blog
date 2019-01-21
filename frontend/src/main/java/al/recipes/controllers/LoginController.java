@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.client.RestTemplate;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 
@@ -43,9 +44,11 @@ public class LoginController {
     
     @GetMapping("/signup")
     @ApiOperation(value = "Get the signup template")
-    public String signup(Model model, @Valid @RequestBody String params) {
+    public String signup(Model model, @Valid @RequestBody String params, HttpServletRequest request) {
+        String https = (String) request.getScheme();
+        String urlConn = https + "://" + request.getServerName();
         
-        String url = "http://localhost/api/signup?" + params;
+        String url = urlConn + "/api/signup?" + params;
         ResponseEntity<?> response = new RestTemplate().postForEntity(url, null, Users.class);
         model.addAttribute("signup_done", true);
         return "login";

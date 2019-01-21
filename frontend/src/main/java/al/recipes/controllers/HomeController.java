@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.client.RestTemplate;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
 @Controller
@@ -39,10 +40,12 @@ public class HomeController {
     @GetMapping(value = {"/", "/{page:[0-9]+}", "/{page:[0-9]+}/cat/{cat}", "/search/{keyword}"})
     @ApiOperation(value = "Get recipes by page / by page and by cat / search", notes = "Get recipes by page / by page and by cat / search")
     public String getAllRecipes(Model model, @PathVariable(value = "page") Optional<Integer> p, @PathVariable Optional<Integer> cat,
-                                @PathVariable(value = "keyword") Optional<String> searchFilter, Locale locale) {
+                                @PathVariable(value = "keyword") Optional<String> searchFilter, Locale locale, HttpServletRequest request) {
         
         final String header_txt = messageSource.getMessage("header_txt", null, locale);
         final String search_results = messageSource.getMessage("search_results", null, locale);
+        String https = (String) request.getScheme();
+        String urlConn = https + "://" + request.getServerName();
         
         List<Recipes> recipes = new ArrayList<>();
         List<String> tags = new ArrayList<>();
@@ -56,21 +59,21 @@ public class HomeController {
         Categories currentCat = null;
         Integer page = 1;
         if (p.isPresent()) page = p.get();
-        String main_url = "http://localhost/api/recipes/" + page;
-        String next_url = "http://localhost/api/recipes/" + (page + 1);
+        String main_url = urlConn + "/api/recipes/" + page;
+        String next_url = urlConn + "/api/recipes/" + (page + 1);
         String link_more = "/" + (page + 1);
-        String tags_url = "http://localhost/api/tags";
-        String recent_url = "http://localhost/api/recipes/1";
+        String tags_url = urlConn + "/api/tags";
+        String recent_url = urlConn + "/api/recipes/1";
         
         if (cat.isPresent()) {
-            main_url = "http://localhost/api/recipes/" + page + "/cat/" + cat.get();
-            next_url = "http://localhost/api/recipes/" + (page + 1) + "/cat/" + cat.get();
+            main_url = urlConn + "/api/recipes/" + page + "/cat/" + cat.get();
+            next_url = urlConn + "/api/recipes/" + (page + 1) + "/cat/" + cat.get();
             link_more = "/" + (page + 1) + "/cat/" + cat.get();
             currentCat = soapResponse.getCategories().stream().filter(c -> c.getId() == cat.get()).findFirst().get();
         }
         
         if (searchFilter.isPresent()) {
-            main_url = "http://localhost/api/search/" + searchFilter.get();
+            main_url = urlConn + "/api/search/" + searchFilter.get();
             next_url = "";
             link_more = "#";
             currentCat = null;
@@ -82,7 +85,7 @@ public class HomeController {
                     );
             Collection<Recipes> recipes_arr = Objects.requireNonNull(response_list.getBody());
             recipes_arr.stream().limit(20).forEach(r -> {
-                r = setTagsIntro(r);
+                r = setTagsIntro(r, urlConn);
                 recipes.add(r);
             });
             
@@ -95,7 +98,7 @@ public class HomeController {
                     );
             Collection<Recipes> recipes_arr = Objects.requireNonNull(response.getBody()).getContent();
             recipes_arr.stream().limit(20).forEach(r -> {
-                r = setTagsIntro(r);
+                r = setTagsIntro(r, urlConn);
                 recipes.add(r);
             });
             
@@ -153,9 +156,10 @@ public class HomeController {
         return "home";
     }
     
-    private Recipes setTagsIntro(Recipes p) {
+    private Recipes setTagsIntro(Recipes p, String urlConn) {
         RestTemplate restTemplate = new RestTemplate();
-        Recipes recipe = restTemplate.getForObject("http://localhost/api/recipe/" + p.getId(), Recipes.class, 200);
+        
+        Recipes recipe = restTemplate.getForObject(urlConn + "/api/recipe/" + p.getId(), Recipes.class, 200);
         List<Tags> tags = Objects.requireNonNull(recipe).getTags();
         tags.sort(Comparator.comparingInt(Tags::getStart_pos));
         

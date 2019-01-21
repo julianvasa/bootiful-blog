@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.client.RestTemplate;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
 @Controller
@@ -38,16 +39,18 @@ public class RecipeController {
     
     @GetMapping("/recipe/{id}")
     @ApiOperation(value = "Get recipe by id and display the view_recipe template")
-    public String index(Model model, @PathVariable long id) {
+    public String index(Model model, @PathVariable long id, HttpServletRequest request) {
         List<Recipes> recipes = new ArrayList<>();
         List<Categories> categories = new ArrayList<>();
         List<String> tagCloud = new ArrayList<>();
         List<Recipes> recent_recipes = new ArrayList<>();
+        String https = (String) request.getScheme();
+        String urlConn = https + "://" + request.getServerName();
         
         RestTemplate restTemplate = new RestTemplate();
-        String main_url = "http://localhost/api/recipe/" + id;
-        String tag_cloud_url = "http://localhost/api/tags";
-        String recent_url = "http://localhost/api/recipes/1";
+        String main_url = urlConn + "/api/recipe/" + id;
+        String tag_cloud_url = urlConn + "/api/tags";
+        String recent_url = urlConn + "/api/recipes/1";
         
         Recipes recipe = restTemplate.getForObject(main_url, Recipes.class, 200);
         List<Tags> tags = Objects.requireNonNull(recipe).getTags();
@@ -145,7 +148,7 @@ public class RecipeController {
         if (!SecurityContextHolder.getContext()
                 .getAuthentication()
                 .getPrincipal().equals("anonymousUser")) {
-            String url = "http://localhost/api/newrecipe?" + id;
+            String url = urlConn+"/api/newrecipe?" + id;
             ResponseEntity<Recipes> response = new RestTemplate().postForEntity(url, null, Recipes.class);
             System.out.println(response.getBody().getId());
             return "redirect:/recipe/" + response.getBody().getId();
