@@ -19,7 +19,7 @@ public class SoapConfiguration {
     
     @Bean
     public SoapClient categoriesClient(Jaxb2Marshaller marshaller) throws UnknownHostException {
-        String urlConn = "http://" + InetAddress.getLocalHost().getHostName();
+        String urlConn = "https://" + InetAddress.getLocalHost().getHostName() + ":443";
         
         SoapClient client = new SoapClient();
         client.setDefaultUri(urlConn + "/ws/categories");
