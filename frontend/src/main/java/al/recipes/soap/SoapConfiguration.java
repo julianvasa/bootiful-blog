@@ -1,17 +1,22 @@
 package al.recipes.soap;
 
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 @Configuration
-public class SoapConfiguration {
-    @Value("${local.server.port}")
-    private int serverPort;
+public class SoapConfiguration implements ApplicationListener<ApplicationReadyEvent> {
+    private int webServerPort = 0;
+    @Autowired
+    private ApplicationContext applicationContext;
     
     @Bean
     public Jaxb2Marshaller marshaller() {
@@ -23,7 +28,6 @@ public class SoapConfiguration {
     @Bean
     public SoapClient categoriesClient(Jaxb2Marshaller marshaller) throws UnknownHostException {
         String urlConn = "http://" + InetAddress.getLocalHost().getHostName();
-        System.out.println("JULIIIII " + serverPort);
         SoapClient client = new SoapClient();
         client.setDefaultUri(urlConn + "/ws/categories");
         client.setMarshaller(marshaller);
@@ -31,4 +35,14 @@ public class SoapConfiguration {
         return client;
     }
     
+    @Override
+    public void onApplicationEvent(ApplicationReadyEvent applicationReadyEvent) {
+        try {
+            String hostName = InetAddress.getLocalHost().getHostName();
+            int port = applicationContext.getBean(Environment.class).getProperty("server.port", Integer.class, 8080);
+            System.out.printf("%s:%d", hostName, port);
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        }
+    }
 }
