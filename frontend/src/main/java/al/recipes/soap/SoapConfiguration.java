@@ -15,6 +15,8 @@ import java.net.UnknownHostException;
 @Configuration
 public class SoapConfiguration implements ApplicationListener<ApplicationReadyEvent> {
     private int webServerPort = 0;
+    private String host = "http://localhost";
+    
     @Autowired
     private ApplicationContext applicationContext;
     
@@ -29,7 +31,7 @@ public class SoapConfiguration implements ApplicationListener<ApplicationReadyEv
     public SoapClient categoriesClient(Jaxb2Marshaller marshaller) throws UnknownHostException {
         String urlConn = "http://" + InetAddress.getLocalHost().getHostName();
         SoapClient client = new SoapClient();
-        client.setDefaultUri(urlConn + "/ws/categories");
+        client.setDefaultUri(host + ":" + webServerPort + "/ws/categories");
         client.setMarshaller(marshaller);
         client.setUnmarshaller(marshaller);
         return client;
@@ -40,7 +42,8 @@ public class SoapConfiguration implements ApplicationListener<ApplicationReadyEv
         try {
             String hostName = InetAddress.getLocalHost().getHostName();
             int port = applicationContext.getBean(Environment.class).getProperty("server.port", Integer.class, 8080);
-            System.out.printf("%s:%d", hostName, port);
+            webServerPort = port;
+            host = hostName;
         } catch (UnknownHostException e) {
             e.printStackTrace();
         }
