@@ -29,7 +29,7 @@ public class SoapConfiguration implements ApplicationListener<ApplicationReadyEv
     
     @Bean
     public SoapClient categoriesClient(Jaxb2Marshaller marshaller) throws UnknownHostException {
-        String urlConn = "http://" + InetAddress.getLocalHost().getHostAddress();
+        String urlConn = "https://" + InetAddress.getLocalHost().getHostAddress() + ":" + webServerPort;
         SoapClient client = new SoapClient();
         client.setDefaultUri(urlConn + "/ws");
         client.setMarshaller(marshaller);
