@@ -30,6 +30,7 @@ public class SoapConfiguration implements ApplicationListener<ApplicationReadyEv
     @Bean
     public SoapClient categoriesClient(Jaxb2Marshaller marshaller) throws UnknownHostException {
         String urlConn = "https://" + InetAddress.getLocalHost().getHostAddress() + ":" + webServerPort;
+        System.out.println(urlConn);
         SoapClient client = new SoapClient();
         client.setDefaultUri("https://bootiful-blog.herokuapp.com/ws/");
         client.setMarshaller(marshaller);
