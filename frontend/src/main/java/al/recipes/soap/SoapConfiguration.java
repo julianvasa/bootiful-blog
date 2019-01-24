@@ -1,6 +1,7 @@
 package al.recipes.soap;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationListener;
@@ -17,6 +18,9 @@ public class SoapConfiguration implements ApplicationListener<ApplicationReadyEv
     private int webServerPort = 0;
     private String host = "http://localhost";
     
+    @Value("${heroku.appname}")
+    private String herokuAppName;
+    
     @Autowired
     private ApplicationContext applicationContext;
     
@@ -31,7 +35,7 @@ public class SoapConfiguration implements ApplicationListener<ApplicationReadyEv
     public SoapClient categoriesClient(Jaxb2Marshaller marshaller) throws UnknownHostException {
         SoapClient client = new SoapClient();
         if (webServerPort != 80) {
-            client.setDefaultUri("https://bootiful-blog.herokuapp.com/ws/");
+            client.setDefaultUri("https://" + herokuAppName + ".herokuapp.com/ws/");
         } else {
             client.setDefaultUri("http://localhost/ws/");
         }

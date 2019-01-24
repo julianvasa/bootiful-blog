@@ -22,8 +22,8 @@ module.exports = {
     cache: true,
     mode: 'development',
     output: {
-        path:__dirname+ '/dist/',
-        filename: "'src/main/resources/static/built/bundle.js'",
+        path:__dirname,
+        filename: "'src/main/resources/static/built/bundle.js",
         publicPath: '/'
     },
     resolve: {
