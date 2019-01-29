@@ -217,13 +217,13 @@
                             <sourceDirs>
                                 <sourceDir>src/main/java</sourceDir>
                             </sourceDirs>
-                            <annotationProcessorPaths>
+                           <!-- <annotationProcessorPaths>
                                 <annotationProcessorPath>
                                     <groupId>org.springframework.boot</groupId>
                                     <artifactId>spring-boot-configuration-processor</artifactId>
                                     <version>${project.parent.version}</version>
                                 </annotationProcessorPath>
-                            </annotationProcessorPaths>
+                            </annotationProcessorPaths>-->
                         </configuration>
                     </execution>
                 </executions>

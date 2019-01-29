@@ -1,7 +1,6 @@
 package al.recipes.controllers
 
 import al.recipes.models.Recipes
-import al.recipes.rest.controllers.TagControllerRest
 import al.recipes.soap.SoapClient
 import categories.wsdl.Categories
 import io.swagger.annotations.ApiOperation
@@ -25,8 +24,6 @@ import javax.servlet.http.HttpServletRequest
 class RecipeController {
     @Autowired
     private val categorySoapClient: SoapClient? = null
-    @Autowired
-    private val tagControllerRest: TagControllerRest? = null
     @Autowired
     private val messageSource: MessageSource? = null
 
