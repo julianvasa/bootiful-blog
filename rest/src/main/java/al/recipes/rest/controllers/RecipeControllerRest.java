@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -59,7 +58,6 @@ public class RecipeControllerRest {
     public Page<Recipes> getAllRecipesByCat(@PathVariable(value = "page") Integer page, @PathVariable(value = "cat") Integer cat) {
         int evalPage = (page < 1) ? INITIAL_PAGE : page - 1;
         Sort sort = new Sort(new Sort.Order(Sort.Direction.DESC, "id"));
-        
         return recipesService.findAllBycategory(cat, new PageRequest(evalPage, INITIAL_PAGE_SIZE, sort));
     }
     
@@ -72,50 +70,52 @@ public class RecipeControllerRest {
     
     @PostMapping("/newrecipe")
     @ApiOperation(value = "Add new recipe", notes = "Add new recipe")
-    public Recipes newRecipe(@RequestParam(value = "id", required = true) long id,
-                             @RequestParam(value = "category_id", required = true) int category_id,
-                             @RequestParam(value = "name", required = true) String name,
-                             @RequestParam(value = "intro", required = false) String intro,
-                             @RequestParam(value = "instruction", required = true) String instruction,
-                             @RequestParam(value = "image", required = false) String image,
-                             @RequestParam(value = "link", required = false) String link,
-                             @RequestParam(value = "time", required = false) String time,
-                             @RequestParam(value = "servings", required = false) String servings,
-                             @RequestParam(value = "calories", required = false) String calories,
-                             @RequestParam(value = "favorite", required = false) int favorite,
-                             @RequestParam(value = "rating", required = false) int rating,
-                             @RequestParam(value = "posted", required = false) int posted,
-                             @RequestParam(value = "video", required = false) String video,
-                             @RequestParam(value = "username", required = true) String username
+    public Recipes newRecipe(
+            @RequestParam(value = "category_id", required = true) Integer category_id,
+            @RequestParam(value = "name", required = true) String name,
+            @RequestParam(value = "intro", required = false) String intro,
+            @RequestParam(value = "instruction", required = true) String instruction,
+            @RequestParam(value = "image", required = false) String image,
+            @RequestParam(value = "time", required = false) String time,
+            @RequestParam(value = "servings", required = false) String servings,
+            @RequestParam(value = "difficulty", required = false) String difficulty,
+            @RequestParam(value = "video", required = false) String video,
+            @RequestParam(value = "username", required = true) String username
     ) {
-        if (!SecurityContextHolder.getContext()
+        /*if (!SecurityContextHolder.getContext()
                 .getAuthentication()
-                .getPrincipal().equals("anonymousUser")) {
-            Users u = usersService.findByUsername(username);
-            if (u != null) {
-                Categories c = new Categories();
-                categoriesService.find(Long.valueOf(category_id));
-                Recipes recipe = new Recipes();
-                recipe.setId(id);
-                recipe.setCategory(c);
-                recipe.setName(name);
-                recipe.setIntro(intro);
-                recipe.setInstruction(instruction);
-                recipe.setCalories(calories);
-                recipe.setRating(rating);
-                recipe.setFavorite(favorite);
-                recipe.setUser(u);
-                recipe.setTime(time);
-                recipe.setPosted(posted);
-                recipe.setLink(link);
-                recipe.setServings(servings);
-                recipe.setVideo(video);
-                recipe.setImage(image);
-                return recipesService.save(recipe);
-            } else {
-                return null;
-            }
+                .getPrincipal().equals("anonymousUser")) {*/
+        Users u = usersService.findByUsername(username);
+        if (u != null) {
+            Categories c = new Categories();
+            Categories cat = categoriesService.findAll().stream().filter(category -> category.getId() == category_id).findFirst().get();
+            List<Recipes> maxIdRecipe = recipesService.maxId();
+            Recipes recipe = new Recipes();
+            recipe.setId(maxIdRecipe.get(0).getId() + 1);
+            recipe.setCategory(cat);
+            recipe.setName(name);
+            recipe.setIntro(intro);
+            recipe.setInstruction(instruction);
+            recipe.setCalories(difficulty);
+            recipe.setRating(0);
+            recipe.setFavorite(0);
+            recipe.setUser(u);
+            recipe.setTime(time);
+            recipe.setPosted(0);
+            recipe.setLink("");
+            recipe.setServings(servings);
+            recipe.setVideo(video);
+            recipe.setImage(image);
+            recipe.setCategory_id(category_id);
+            //System.out.println(recipe);
+            return recipesService.save(recipe);
+        } else {
+            return null;
+        }
+
+/*
         } else return null;
+*/
     }
 
 

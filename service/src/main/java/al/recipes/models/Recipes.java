@@ -23,7 +23,7 @@ public class Recipes implements Serializable {
     private static final long serialVersionUID = 2L;
     
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    // @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
     @Column(nullable = false, length = 300, name = "name")

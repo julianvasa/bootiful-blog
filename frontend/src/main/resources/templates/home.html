@@ -76,16 +76,12 @@ Authenticated user roles:
                         </div>
                         
                         
-                        <p th:if="${recipe.instruction.length()}<=300"
-                           th:utext="${recipe.instruction}"></p>
-                        <p th:if="${recipe.intro.length()}>10"
+                        <p th:if="${recipe.intro.length()}<=300"
                            th:utext="${recipe.intro}"></p>
-                        <p th:if="${recipe.intro.length()}<=10"
-                           th:utext="${recipe.instruction.substring(0,300)+'...'}"></p>
+                        <p th:if="${recipe.intro.length()}>300"
+                           th:utext="${recipe.intro.substring(0,300)+'...'}"></p>
                         <br>
-                        <!--<p class="date"><em>[[#{posted}+':
-                            '+${recipe.posted.toString().substring(6,8)}+'/'+${recipe.posted.toString().substring(4,6)}+'/'+${recipe.posted.toString().substring(0,4)}]]</em>
-                        </p>-->
+                        
                         <a class="btn read-more-btn" th:href="@{/recipe/}+${recipe.id}"><b>[[#{read}]]</b></a>
                     
                     
@@ -125,16 +121,11 @@ Authenticated user roles:
                                 
                                 
                                 </div>
-                                <!--<p class="date"><em>[[#{posted}+':
-                                    '+${recipe.posted.toString().substring(6,8)}+'/'+${recipe.posted.toString().substring(4,6)}+'/'+${recipe.posted.toString().substring(0,4)}]]</em>
-                                </p>-->
                                 
-                                <p th:if="${recipe.instruction.length()}<=300"
-                                   th:utext="${recipe.instruction}"></p>
-                                <p th:if="${recipe.intro.length()}>10"
+                                <p th:if="${recipe.intro.length()}<=300"
                                    th:utext="${recipe.intro}"></p>
-                                <p th:if="${recipe.intro.length()}<=10"
-                                   th:utext="${recipe.instruction.substring(0,300)}+' ...'"></p>
+                                <p th:if="${recipe.intro.length()}>300"
+                                   th:utext="${recipe.intro.substring(0,300)+'...'}"></p>
                                 
                                 <a class="btn read-more-btn" th:href="@{/recipe/}+${recipe.id}"><b>[[#{read}]]</b></a>
                             </div><!-- single-post -->

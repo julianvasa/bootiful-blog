@@ -6,6 +6,7 @@ import al.recipes.repositories.SearchRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,6 +21,14 @@ public class RecipesService {
     
     public Recipes save(Recipes recipe) {
         return this.recipeRepo.save(recipe);
+    }
+    
+    public List<Recipes> maxId() {
+        return (List<Recipes>) this.recipeRepo.findAll(sortByIdDesc());
+    }
+    
+    private Sort sortByIdDesc() {
+        return new Sort(Sort.Direction.DESC, "id");
     }
     
     public List<Recipes> search(String filter) {
