@@ -10,7 +10,6 @@ import org.springframework.ws.server.endpoint.annotation.PayloadRoot;
 import org.springframework.ws.server.endpoint.annotation.RequestPayload;
 import org.springframework.ws.server.endpoint.annotation.ResponsePayload;
 
-import java.util.Comparator;
 import java.util.List;
 
 @Endpoint
@@ -25,9 +24,7 @@ public class CategoriesEndpoint {
         GetCategoriesResponse response = new GetCategoriesResponse();
         List<al.recipes.categories.Categories> uuu = response.getCategories();
         List<Categories> uu = categoriesService.findAll();
-        //List<al.recipes.categories.Categories> uuu = new ArrayList<>();
-        
-        uu.sort(Comparator.comparingInt(Categories::getCount).reversed());
+        // uu.sort(Comparator.comparingInt(Categories::getCount).reversed());
         uu.forEach(p ->
                 {
                     al.recipes.categories.Categories ppp = new al.recipes.categories.Categories();
