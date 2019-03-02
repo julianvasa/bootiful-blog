@@ -10,11 +10,11 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class UserService {
+    
     @Autowired
     private UserRepository userRepo;
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
-    
     
     public Users findByUsername(String username) {
         return userRepo.findByUsername(username);
@@ -38,4 +38,6 @@ public class UserService {
         u.setRole(r);
         userRepo.save(u);
     }
+    
+    
 } 

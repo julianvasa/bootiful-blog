@@ -10,6 +10,8 @@ import org.springframework.context.MessageSource
 import org.springframework.core.ParameterizedTypeReference
 import org.springframework.hateoas.PagedResources
 import org.springframework.http.HttpMethod
+import org.springframework.security.core.context.SecurityContextHolder
+import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.client.RestTemplate
 import java.util.*
 import javax.servlet.http.HttpServletRequest
+
 
 @Controller
 @RequestMapping("/")
@@ -38,10 +41,12 @@ class RecipeController {
 
         val restTemplate = RestTemplate()
         val main_url = "$urlConn/api/recipe/$id"
+
         val tag_cloud_url = "$urlConn/api/tags"
         val recent_url = "$urlConn/api/recipes/1"
 
-        val recipe = restTemplate.getForObject(main_url, Recipes::class.java, 200)
+        var recipe = restTemplate.getForObject(main_url, Recipes::class.java, 200)
+
         val tags = Objects.requireNonNull<Recipes>(recipe).tags
         tags.sortWith(Comparator.comparingInt { it.getStart_pos() })
         val soapResponse = categorySoapClient!!.categories
@@ -100,6 +105,15 @@ class RecipeController {
                 }
             }
         }
+
+        val userInfo = SecurityContextHolder.getContext().authentication.principal as UserDetails
+        val currentUser = userInfo.username
+
+        if (recipe!!.user == null) {
+            restTemplate.postForEntity("$urlConn/api/setUserRecipe/$id/$currentUser", null, Recipes::class.java)
+        }
+        recipe = restTemplate.getForObject(main_url, Recipes::class.java, 200)
+
         if (currentCat.id > 0) {
             model.addAttribute("currentCat", currentCat)
         }
@@ -108,51 +122,18 @@ class RecipeController {
         model.addAttribute("tags", tags)
         model.addAttribute("recipe", recipe)
         model.addAttribute("categories", categories)
-
         return "view_recipe"
     }
-
-    /*@PostMapping("/addrecipe")
-    public String newRecipe(Model model, @RequestParam(value = "id", required = true) long id,
-                            @RequestParam(value = "category_id", required = true) int category_id,
-                            @RequestParam(value = "name", required = true) String name,
-                            @RequestParam(value = "intro", required = false) String intro,
-                            @RequestParam(value = "instruction", required = true) String instruction,
-                            @RequestParam(value = "image", required = false) String image,
-                            @RequestParam(value = "link", required = false) String link,
-                            @RequestParam(value = "time", required = false) String time,
-                            @RequestParam(value = "servings", required = false) String servings,
-                            @RequestParam(value = "calories", required = false) String calories,
-                            @RequestParam(value = "favorite", required = false) int favorite,
-                            @RequestParam(value = "rating", required = false) int rating,
-                            @RequestParam(value = "posted", required = false) int posted,
-                            @RequestParam(value = "video", required = false) String video,
-                            @RequestParam(value = "username", required = true) String username) {
-        System.out.println(SecurityContextHolder.getContext()
-                .getAuthentication()
-                .getPrincipal());
-
-        if (!SecurityContextHolder.getContext()
-                .getAuthentication()
-                .getPrincipal().equals("anonymousUser")) {
-            String url = urlConn+"/api/newrecipe?" + id;
-            ResponseEntity<Recipes> response = new RestTemplate().postForEntity(url, null, Recipes.class);
-            System.out.println(response.getBody().getId());
-            return "redirect:/recipe/" + response.getBody().getId();
-        } else {
-            return "login";
-        }
-    }*/
 
     @GetMapping("/add")
     @ApiOperation(value = "Get template to add a new recipe")
     fun index(model: Model, locale: Locale): String {
         val page_title = messageSource!!.getMessage("add", null, locale)
         model.addAttribute("page_title", page_title)
-        return "edit_recipe"
+        return "create_recipe"
     }
 
     companion object {
-        private val log = LoggerFactory.getLogger(HomeController::class.java)
+        private val log = LoggerFactory.getLogger(RecipeController::class.java)
     }
 }

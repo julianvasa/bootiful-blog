@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Objects;
 
 @Component(value = "userDetailService")
-public class UserDetailService implements UserDetailsService {
+public class BlogUserDetailService implements UserDetailsService {
     
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         try {

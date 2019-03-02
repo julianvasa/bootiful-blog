@@ -32,9 +32,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable();
+        http.cors().disable();
         //requireCsrfProtectionMatcher(new AntPathRequestMatcher("**/login")).
         http.authorizeRequests().antMatchers("/", "/login", "/logout").permitAll()
-                .antMatchers("/profile").access("hasAnyRole('ROLE_USER')")
+                //.antMatchers("/profile").access("hasAnyRole('ROLE_USER')")
                 .antMatchers("/add").authenticated()
                 //.antMatchers("/api/tags/**").authenticated()
                 //.antMatchers("/api/categories/**").authenticated()
@@ -44,7 +45,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .failureUrl("/login-error")
                 .usernameParameter("username")
                 .passwordParameter("password")
-                .and().logout().logoutUrl("/logout").logoutSuccessUrl("/logoutSuccessful")
+                .and().logout().logoutUrl("/logout").logoutSuccessUrl("/logoutSuccessful").invalidateHttpSession(true)
+                .deleteCookies("JSESSIONID")
                 .and().exceptionHandling().accessDeniedPage("/denied");
     }
     

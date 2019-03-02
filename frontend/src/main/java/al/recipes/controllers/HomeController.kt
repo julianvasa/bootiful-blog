@@ -20,6 +20,7 @@ import org.springframework.web.client.exchange
 import java.util.*
 import javax.servlet.http.HttpServletRequest
 
+
 @Controller
 @RequestMapping("/")
 class HomeController {
@@ -32,7 +33,6 @@ class HomeController {
     @ApiOperation(value = "Get recipes by page / by page and by cat / search", notes = "Get recipes by page / by page and by cat / search")
     fun getAllRecipes(model: Model, @PathVariable(value = "page") p: Optional<Int>, @PathVariable cat: Optional<Int>,
                       @PathVariable(value = "keyword") searchFilter: Optional<String>, locale: Locale, request: HttpServletRequest): String {
-
         val header_txt = messageSource!!.getMessage("header_txt", null, locale)
         val search_results = messageSource.getMessage("search_results", null, locale)
         val https = request.scheme as String

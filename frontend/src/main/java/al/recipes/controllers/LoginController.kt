@@ -45,7 +45,7 @@ class LoginController {
         val urlConn = https + "://" + request.serverName
 
         val url = "$urlConn/api/signup?$params"
-        val response = RestTemplate().postForEntity(url, null, Users::class.java)
+        RestTemplate().postForEntity(url, null, Users::class.java)
         model.addAttribute("signup_done", true)
         return "login"
     }

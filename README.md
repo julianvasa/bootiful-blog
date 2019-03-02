@@ -26,7 +26,7 @@ There is a sidebar which shows some recent posts, the categories, a kind of tag 
 
 Database setup:
 By default the app runs on H2 DB. If you want to switch to MySQL follow the steps below:
- - Uncomment the following variables in frontend/application.properties and change IP, PORT and DB_NAME
+ Uncomment the following variables in frontend/application.properties and change IP, PORT and DB_NAME
       
         MySQL
         spring.datasource.url=jdbc:mysql://IP:PORT/DB_NAME?characterEncoding=utf8&verifyServerCertificate=false&useSSL=false&requireSSL=false
@@ -37,7 +37,7 @@ By default the app runs on H2 DB. If you want to switch to MySQL follow the step
         spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQL5InnoDBDialect
         spring.jpa.properties.hibernate.id.new_generator_mappings=false
         spring.datasource.initialization-mode=always
-  - Uncomment the MySQL dependency in service/pom.xml and comment the H2 dependency 
+  Uncomment the MySQL dependency in service/pom.xml and comment the H2 dependency 
 
  ***
 
@@ -45,3 +45,11 @@ By default the app runs on H2 DB. If you want to switch to MySQL follow the step
  
  [REST API Documentation](http://localhost/swagger-ui.html)<br>
  [SOAP WSDL](http://localhost/ws/categories.wsdl)
+ 
+ The project is ready to be deployed in **Heroku** and **Docker**. 
+ <br>
+ Please change the `docker.image.prefix` in frontend/Dockerfile and run dockerfile plugin, it will generate an image file that can be deployed in Docker. Docker application should be running before running maven plugin dockerfile.
+  
+ If you want to deploy it in Heroku or Docker, connect it with a Github repo. 
+ 
+ ![Screenshot](Screenshot.png)

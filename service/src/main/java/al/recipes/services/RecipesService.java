@@ -1,6 +1,8 @@
 package al.recipes.services;
 
+import al.recipes.models.Ingredients;
 import al.recipes.models.Recipes;
+import al.recipes.models.Users;
 import al.recipes.repositories.RecipeRepository;
 import al.recipes.repositories.SearchRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +11,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class RecipesService {
@@ -39,7 +43,23 @@ public class RecipesService {
         return this.recipeRepo.findAll(e);
     }
     
+    public void updateUser(long recipeid, Users u) {
+        Optional<Recipes> r = this.recipeRepo.findById(recipeid);
+        if (r.isPresent() && u != null) {
+            r.get().setUser(u);
+            this.recipeRepo.save(r.get());
+        }
+    }
+    
     public Page<Recipes> findAllBycategory(int cat, Pageable e) {
         return this.recipeRepo.findAllBycategory_id(cat, e);
     }
+    
+    public Long maxIngrId() {
+        List<Recipes> list = maxId();
+        List<Ingredients> ingrs = list.get(0).getIngredients();
+        ingrs.sort(Comparator.comparingLong(Ingredients::getId).reversed());
+        return ingrs.get(0).getId();
+    }
+    
 }
