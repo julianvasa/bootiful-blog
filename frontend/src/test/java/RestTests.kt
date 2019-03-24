@@ -27,7 +27,6 @@ class RestTests {
 
     @Test
     fun `Get the last recipe details`() {
-        //val restTemplate = RestTemplate()
         val mainUrl = "http://localhost/api/recipe/10413"
         val recipe = restTemplate.getForObject(mainUrl, Recipes::class.java, 200)
         assertThat(recipe).isNotNull()
