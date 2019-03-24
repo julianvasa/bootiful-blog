@@ -4,7 +4,6 @@ import al.recipes.models.Recipes
 import al.recipes.soap.SoapClient
 import categories.wsdl.Categories
 import io.swagger.annotations.ApiOperation
-import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.MessageSource
 import org.springframework.core.ParameterizedTypeReference
@@ -35,94 +34,106 @@ class RecipeController {
     fun index(model: Model, @PathVariable id: Long, request: HttpServletRequest): String {
         val categories = ArrayList<Categories>()
         val tagCloud = ArrayList<String>()
-        val recent_recipes = ArrayList<Recipes>()
+        val recentRecipes = ArrayList<Recipes>()
         val https = request.scheme as String
         val urlConn = https + "://" + request.serverName
-
         val restTemplate = RestTemplate()
-        val main_url = "$urlConn/api/recipe/$id"
+        val mainUrl = "$urlConn/api/recipe/$id"
+        val tagCloudUrl = "$urlConn/api/tags"
+        val recentUrl = "$urlConn/api/recipes/1"
 
-        val tag_cloud_url = "$urlConn/api/tags"
-        val recent_url = "$urlConn/api/recipes/1"
-
-        var recipe = restTemplate.getForObject(main_url, Recipes::class.java, 200)
-
+        // Get recipe details
+        var recipe = restTemplate.getForObject(mainUrl, Recipes::class.java, 200)
+        // Get tags related with the current recipe
         val tags = Objects.requireNonNull<Recipes>(recipe).tags
         tags.sortWith(Comparator.comparingInt { it.getStart_pos() })
+        // Get list of categories (sidebar)
         val soapResponse = categorySoapClient!!.categories
         categories.addAll(soapResponse.categories)
-
+        // Get the category of the current recipe
         val currentCat = soapResponse.categories.stream().filter { c -> c.id == recipe!!.category.id }.findFirst().get()
 
-        val tags_response = restTemplate.exchange(tag_cloud_url,
+        // Get tag cloud (sidebar)
+        val tagsCloudResponse = restTemplate.exchange(tagCloudUrl,
                 HttpMethod.GET, null, object : ParameterizedTypeReference<List<String>>() {
 
         }
         )
-        val tags_arr = Objects.requireNonNull<List<String>>(tags_response.body)
-        tags_arr.stream().limit(20).forEach({ tagCloud.add(it) })
+        val tagCloudArray = Objects.requireNonNull<List<String>>(tagsCloudResponse.body)
+        tagCloudArray.stream().limit(20).forEach { tagCloud.add(it) }
 
-        val recent_response = restTemplate.exchange(recent_url,
+        // Get recent recipes (sidebar)
+        val recentResponse = restTemplate.exchange(recentUrl,
                 HttpMethod.GET, null, object : ParameterizedTypeReference<PagedResources<Recipes>>() {
 
         }
         )
-        val recent_recipes_arr = Objects.requireNonNull<PagedResources<Recipes>>(recent_response.body).content
-        recent_recipes_arr.stream().limit(10).forEach({ recent_recipes.add(it) })
+        val recentRecipesArray = Objects.requireNonNull<PagedResources<Recipes>>(recentResponse.body).content
+        recentRecipesArray.stream().limit(10).forEach { recentRecipes.add(it) }
 
-        var start_pos = 0
-        var start_pos2 = 0
-        for (tag in tags) {
-            if (tag.intro_instruction == "instruction") {
-                val ins = StringBuilder(recipe!!.instruction)
-                if (!ins.substring(tag.start_pos + start_pos, tag.end_pos + start_pos).contains("<a") && !ins.substring(tag.start_pos + start_pos2, tag.end_pos + start_pos2).contains("<a")) {
+        // Make tags inside intro and instruction link to search url
+        setTags(recipe)
 
-                    recipe.instruction = ins.replace(
-                            tag.start_pos + start_pos,
-                            tag.end_pos + start_pos,
-                            "<a class='tags' href='/search/" + tag.value + "'>" + tag.value + "</a>"
-                    ).toString()
-                    start_pos2 = start_pos
-                    start_pos += ("<a class='tags' href='/search/" + tag.value + "'>" + "</a>").length
-                }
+        // Update recipe owner if missing
+        if (SecurityContextHolder.getContext().authentication.principal is UserDetails) {
+            val userInfo = SecurityContextHolder.getContext().authentication.principal as UserDetails
+            val currentUser = userInfo.username
+
+            if (recipe!!.user == null) {
+                restTemplate.postForEntity("$urlConn/api/setUserRecipe/$id/$currentUser", null, Recipes::class.java)
             }
+            recipe = restTemplate.getForObject(mainUrl, Recipes::class.java, 200)
         }
-
-        start_pos = 0
-        start_pos2 = 0
-        for (tag in tags) {
-            if (tag.intro_instruction == "intro") {
-                val ins = StringBuilder(recipe!!.intro)
-                if (!ins.substring(tag.start_pos + start_pos, tag.end_pos + start_pos).contains("<a") && !ins.substring(tag.start_pos + start_pos2, tag.end_pos + start_pos2).contains("<a")) {
-
-                    recipe.intro = ins.replace(
-                            tag.start_pos + start_pos,
-                            tag.end_pos + start_pos,
-                            "<a class='tags' href='/search/" + tag.value + "'>" + tag.value + "</a>"
-                    ).toString()
-                    start_pos2 = start_pos
-                    start_pos += ("<a class='tags' href='/search/" + tag.value + "'>" + "</a>").length
-                }
-            }
-        }
-
-        val userInfo = SecurityContextHolder.getContext().authentication.principal as UserDetails
-        val currentUser = userInfo.username
-
-        if (recipe!!.user == null) {
-            restTemplate.postForEntity("$urlConn/api/setUserRecipe/$id/$currentUser", null, Recipes::class.java)
-        }
-        recipe = restTemplate.getForObject(main_url, Recipes::class.java, 200)
-
         if (currentCat.id > 0) {
             model.addAttribute("currentCat", currentCat)
         }
-        model.addAttribute("recent", recent_recipes)
+        model.addAttribute("recent", recentRecipes)
         model.addAttribute("tagCloud", tagCloud)
         model.addAttribute("tags", tags)
         model.addAttribute("recipe", recipe)
         model.addAttribute("categories", categories)
         return "view_recipe"
+    }
+
+    private fun setTags(recipe: Recipes?): Recipes? {
+        val tags = Objects.requireNonNull<Recipes>(recipe).tags
+        tags.sortWith(Comparator.comparingInt { it.start_pos })
+
+        var startPos = 0
+        var startPos2 = 0
+        for (tag in tags) {
+            if (tag.intro_instruction == "intro") {
+                val ins = StringBuilder(recipe!!.intro)
+                if (!ins.substring(tag.start_pos + startPos, tag.end_pos + startPos).contains("<a") && !ins.substring(tag.start_pos + startPos2, tag.end_pos + startPos2).contains("<a")) {
+
+                    recipe.intro = ins.replace(
+                            tag.start_pos + startPos,
+                            tag.end_pos + startPos,
+                            "<a class='tags' href='/search/" + tag.value + "'>" + tag.value + "</a>"
+                    ).toString()
+                    startPos2 = startPos
+                    startPos += ("<a class='tags' href='/search/" + tag.value + "'>" + "</a>").length
+                }
+            }
+        }
+        startPos = 0
+        startPos2 = 0
+        for (tag in tags) {
+            if (tag.intro_instruction == "instruction") {
+                val ins = StringBuilder(recipe!!.instruction)
+                if (!ins.substring(tag.start_pos + startPos, tag.end_pos + startPos).contains("<a") && !ins.substring(tag.start_pos + startPos2, tag.end_pos + startPos2).contains("<a")) {
+
+                    recipe.instruction = ins.replace(
+                            tag.start_pos + startPos,
+                            tag.end_pos + startPos,
+                            "<a class='tags' href='/search/" + tag.value + "'>" + tag.value + "</a>"
+                    ).toString()
+                    startPos2 = startPos
+                    startPos += ("<a class='tags' href='/search/" + tag.value + "'>" + "</a>").length
+                }
+            }
+        }
+        return recipe!!
     }
 
     @GetMapping("/add")
@@ -131,9 +142,5 @@ class RecipeController {
         val page_title = messageSource!!.getMessage("add", null, locale)
         model.addAttribute("page_title", page_title)
         return "create_recipe"
-    }
-
-    companion object {
-        private val log = LoggerFactory.getLogger(RecipeController::class.java)
     }
 }

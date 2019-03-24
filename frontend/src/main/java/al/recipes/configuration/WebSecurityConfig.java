@@ -33,12 +33,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable();
         http.cors().disable();
-        //requireCsrfProtectionMatcher(new AntPathRequestMatcher("**/login")).
         http.authorizeRequests().antMatchers("/", "/login", "/logout").permitAll()
                 //.antMatchers("/profile").access("hasAnyRole('ROLE_USER')")
                 .antMatchers("/add").authenticated()
-                //.antMatchers("/api/tags/**").authenticated()
-                //.antMatchers("/api/categories/**").authenticated()
                 .and().formLogin()
                 .loginPage("/login")
                 .defaultSuccessUrl("/")

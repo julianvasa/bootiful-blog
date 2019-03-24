@@ -16,7 +16,6 @@ import java.net.UnknownHostException;
 @Configuration
 public class SoapConfiguration implements ApplicationListener<ApplicationReadyEvent> {
     private int webServerPort = 0;
-    private String host = "http://localhost";
     
     @Value("${heroku.appname}")
     private String herokuAppName;
@@ -48,9 +47,8 @@ public class SoapConfiguration implements ApplicationListener<ApplicationReadyEv
     public void onApplicationEvent(ApplicationReadyEvent applicationReadyEvent) {
         try {
             String hostName = InetAddress.getLocalHost().getHostAddress();
-            int port = applicationContext.getBean(Environment.class).getProperty("server.port", Integer.class, 8080);
-            webServerPort = port;
-            host = hostName;
+            webServerPort = applicationContext.getBean(Environment.class).getProperty("server.port", Integer.class, 8080);
+            String host = hostName;
         } catch (UnknownHostException e) {
             e.printStackTrace();
         }

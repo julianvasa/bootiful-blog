@@ -15,6 +15,7 @@ import org.springframework.xml.xsd.XsdSchema;
 @EnableWs
 @Configuration
 public class WebServiceConfig extends WsConfigurerAdapter {
+    @SuppressWarnings("unchecked")
     @Bean
     public ServletRegistrationBean messageDispatcherServlet(ApplicationContext applicationContext) {
         MessageDispatcherServlet servlet = new MessageDispatcherServlet();
@@ -22,7 +23,7 @@ public class WebServiceConfig extends WsConfigurerAdapter {
         servlet.setTransformWsdlLocations(true);
         return new ServletRegistrationBean(servlet, "/ws/*");
     }
-
+    
     @Bean(name = "categories")
     public DefaultWsdl11Definition defaultWsdl11Definition(XsdSchema categoriesSchema) {
         DefaultWsdl11Definition wsdl11Definition = new DefaultWsdl11Definition();
@@ -33,7 +34,7 @@ public class WebServiceConfig extends WsConfigurerAdapter {
         wsdl11Definition.setSchema(categoriesSchema);
         return wsdl11Definition;
     }
-
+    
     @Bean
     public XsdSchema categoriesSchema() {
         return new SimpleXsdSchema(new ClassPathResource("categories.xsd"));
