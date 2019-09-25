@@ -20,21 +20,20 @@ import java.io.Serializable;
 @NoArgsConstructor
 @ToString
 @ApiModel(description = "Categories Data Model")
-
 public class Categories implements Serializable {
-    
+
     private static final long serialVersionUID = 1L;
     @Id
     private int id;
     @ApiModelProperty(notes = "Name should have at least 2 characters")
-    @Column(nullable = false, length = 100, unique = false, name = "name")
+    @Column(nullable = false, length = 100, name = "name")
     private String name;
     @ApiModelProperty(notes = "Image is a link to an image for each category")
-    @Column(nullable = true, length = 100, unique = false, name = "image")
+    @Column(length = 100, name = "image")
     private String image;
     @ApiModelProperty(notes = "Count is the number of recipes of the current category")
-    @Column(nullable = true, length = 11, unique = false, name = "count")
+    @Column(length = 11, name = "count")
     private int count;
-    
-    
+
+
 }

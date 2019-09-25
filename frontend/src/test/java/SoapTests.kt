@@ -9,9 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @SpringBootTest(
-        classes = [Application::class],
-        webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
-)
+        classes = [Application::class])
 class SoapTests {
 
     @Autowired

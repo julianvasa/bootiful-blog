@@ -18,7 +18,7 @@ public class SwaggerConfig {
             "Julian Vasa",
             "https://github.com/julianvasa",
             "vasa.julian@gmail.com");
-    
+
     @Bean
     public Docket productApi() {
         return new Docket(DocumentationType.SWAGGER_2)
@@ -28,13 +28,13 @@ public class SwaggerConfig {
                 .paths(PathSelectors.any())
                 .build();
     }
-    
+
     private ApiInfo metaData() {
-        
+
         return new ApiInfoBuilder()
                 .title("Bootiful blog")
                 .description("Simple blog built with a bunch of programming languages")
-                .version("1.0")
+                .version("2.0")
                 .contact(DEFAULT_CONTACT)
                 .license("Apache 2.0")
                 .licenseUrl("http://www.apache.org/licenses/LICENSE-2.0")

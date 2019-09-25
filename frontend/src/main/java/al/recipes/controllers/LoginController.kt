@@ -56,9 +56,5 @@ class LoginController {
         model.addAttribute("logout", true)
         return "login"
     }
-
-    companion object {
-        private val log = LoggerFactory.getLogger(LoginController::class.java)
-    }
 }
 

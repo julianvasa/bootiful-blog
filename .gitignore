@@ -48,3 +48,4 @@ target/
 *.iml
 .idea/
 .eclipse
+/frontend/node_modules/

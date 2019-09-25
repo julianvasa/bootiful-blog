@@ -1,12 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module org.jetbrains.idea.maven.project.MavenProjectsManager.isMavenModule="true" type="JAVA_MODULE" version="4">
+  <component name="FacetManager">
+    <facet type="kotlin-language" name="Kotlin">
+      <configuration version="3" platform="JavaScript " allPlatforms="JS []" useProjectSettings="false">
+        <productionOutputPath>$MODULE_DIR$/target/js/food-blog.js</productionOutputPath>
+        <testOutputPath>$MODULE_DIR$/target/test-js/food-blog-tests.js</testOutputPath>
+        <compilerSettings />
+        <compilerArguments>
+          <option name="sourceMapEmbedSources" value="inlining" />
+          <option name="languageVersion" value="1.3" />
+          <option name="apiVersion" value="1.3" />
+          <option name="pluginOptions">
+            <array />
+          </option>
+          <option name="pluginClasspaths">
+            <array />
+          </option>
+          <option name="errors">
+            <ArgumentParseErrors />
+          </option>
+        </compilerArguments>
+      </configuration>
+    </facet>
+  </component>
   <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_5">
-    <output url="file://$MODULE_DIR$/target/classes" />
-    <output-test url="file://$MODULE_DIR$/target/test-classes" />
+    <output url="$MODULE_DIR$/target/js" />
+    <output-test url="$MODULE_DIR$/target/test-js" />
     <content url="file://$MODULE_DIR$">
       <excludeFolder url="file://$MODULE_DIR$/target" />
     </content>
-    <orderEntry type="inheritedJdk" />
+    <orderEntry type="jdk" jdkName="Kotlin SDK" jdkType="KotlinSDK" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="Maven: org.jetbrains.kotlin:kotlin-stdlib-js:1.3.50" level="project" />
+    <orderEntry type="library" name="Maven: org.jetbrains.kotlin:kotlin-stdlib-common:1.3.50" level="project" />
   </component>
 </module>

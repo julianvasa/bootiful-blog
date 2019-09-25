@@ -7,13 +7,11 @@ import org.junit.jupiter.api.TestInstance
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 
+
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @SpringBootTest(
-        classes = [Application::class],
-        webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
-)
+    classes = [Application::class])
 class ServiceTests {
-
     @Autowired
     lateinit var categoriesService: CategoriesService
 

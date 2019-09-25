@@ -10,10 +10,10 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 @RepositoryRestResource(path = "recipes", collectionResourceRel = "recipes")
 public interface RecipeRepository extends PagingAndSortingRepository<Recipes, Long> {
     Page<Recipes> findAll(Pageable pageable);
-    
-    Page<Recipes> findAllBycategory_id(int categoryValue, Pageable pageable);
-    
+
+    Page<Recipes> findAllByCategoryId(int categoryValue, Pageable pageable);
+
     @SuppressWarnings("unchecked")
     Recipes save(Recipes note);
-    
+
 }

@@ -4,7 +4,6 @@ import al.recipes.models.Recipes
 import al.recipes.soap.SoapClient
 import categories.wsdl.Categories
 import io.swagger.annotations.ApiOperation
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.MessageSource
 import org.springframework.core.ParameterizedTypeReference
 import org.springframework.hateoas.PagedResources
@@ -23,11 +22,7 @@ import javax.servlet.http.HttpServletRequest
 
 @Controller
 @RequestMapping("/")
-class RecipeController {
-    @Autowired
-    private val categorySoapClient: SoapClient? = null
-    @Autowired
-    private val messageSource: MessageSource? = null
+class RecipeController(private val categorySoapClient: SoapClient, private val messageSource: MessageSource) {
 
     @GetMapping("/recipe/{id}")
     @ApiOperation(value = "Get recipe by id and display the view_recipe template")
@@ -79,7 +74,7 @@ class RecipeController {
             val userInfo = SecurityContextHolder.getContext().authentication.principal as UserDetails
             val currentUser = userInfo.username
 
-            if (recipe!!.user == null) {
+            if (recipe!!.author == null) {
                 restTemplate.postForEntity("$urlConn/api/setUserRecipe/$id/$currentUser", null, Recipes::class.java)
             }
             recipe = restTemplate.getForObject(mainUrl, Recipes::class.java, 200)
