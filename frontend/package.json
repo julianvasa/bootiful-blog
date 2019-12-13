@@ -11,7 +11,7 @@
     "babel-core": "^6.26.3",
     "babel-loader": "^6.4.1",
     "core-util-is": "^1.0.2",
-    "npm": "^6.11.3",
+    "npm": "^6.13.4",
     "react": "^16.8.0",
     "react-dom": "^16.8.0",
     "react-scripts": "2.1.3",
